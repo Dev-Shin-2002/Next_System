@@ -1,0 +1,63 @@
+{
+  "common": {
+    "appName": "System Manager",
+    "dashboard": "Dashboard",
+    "language": "Language",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System",
+    "search": "Search...",
+    "filter": "Filter",
+    "refresh": "Refresh",
+    "save": "Save changes",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "actions": "Actions",
+    "status": "Status",
+    "loading": "Loading data...",
+    "viewAll": "View all",
+    "welcome": "Welcome back, {name}!"
+  },
+  "nav": {
+    "dashboard": "Overview",
+    "services": "System Services",
+    "tasks": "Background Tasks",
+    "logs": "System Logs",
+    "metrics": "Performance Metrics",
+    "alerts": "Alerts",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "System Overview",
+    "subtitle": "Real-time resource, services and operational status monitoring",
+    "systemHealth": "System Health",
+    "activeServices": "Active Services",
+    "cpuUsage": "CPU Load",
+    "ramUsage": "RAM Usage",
+    "diskUsage": "Disk Usage",
+    "networkTraffic": "Network Traffic",
+    "recentAlerts": "Recent Alerts",
+    "quickActions": "Quick Actions",
+    "restartService": "Restart Service",
+    "clearLogs": "Clear Logs",
+    "systemUptime": "System Uptime"
+  },
+  "system": {
+    "status": {
+      "healthy": "Healthy",
+      "running": "Running",
+      "degraded": "Degraded",
+      "stopped": "Stopped",
+      "error": "Error",
+      "pending": "Pending"
+    }
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "serverError": "Internal server error",
+    "unauthorized": "Unauthorized access",
+    "tryAgain": "Please try again later"
+  }
+}

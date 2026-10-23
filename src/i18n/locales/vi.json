@@ -1,0 +1,63 @@
+{
+  "common": {
+    "appName": "System Manager",
+    "dashboard": "Bảng điều khiển",
+    "language": "Ngôn ngữ",
+    "theme": "Giao diện",
+    "dark": "Tối",
+    "light": "Sáng",
+    "system": "Hệ thống",
+    "search": "Tìm kiếm...",
+    "filter": "Lọc",
+    "refresh": "Làm mới",
+    "save": "Lưu thay đổi",
+    "cancel": "Hủy bỏ",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "actions": "Hành động",
+    "status": "Trạng thái",
+    "loading": "Đang tải dữ liệu...",
+    "viewAll": "Xem tất cả",
+    "welcome": "Xin chào, {name}!"
+  },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "services": "Dịch vụ hệ thống",
+    "tasks": "Tác vụ chạy nền",
+    "logs": "Nhật ký Logs",
+    "metrics": "Hiệu năng Metrics",
+    "alerts": "Cảnh báo",
+    "settings": "Cài đặt"
+  },
+  "dashboard": {
+    "title": "Tổng quan hệ thống",
+    "subtitle": "Giám sát tài nguyên, dịch vụ và trạng thái vận hành thời gian thực",
+    "systemHealth": "Sức khỏe hệ thống",
+    "activeServices": "Dịch vụ đang chạy",
+    "cpuUsage": "Tải CPU",
+    "ramUsage": "Bộ nhớ RAM",
+    "diskUsage": "Dung lượng ổ cứng",
+    "networkTraffic": "Lưu lượng mạng",
+    "recentAlerts": "Cảnh báo gần đây",
+    "quickActions": "Thao tác nhanh",
+    "restartService": "Khởi động lại",
+    "clearLogs": "Dọn dẹp logs",
+    "systemUptime": "Thời gian hoạt động"
+  },
+  "system": {
+    "status": {
+      "healthy": "Ổn định",
+      "running": "Đang hoạt động",
+      "degraded": "Hiệu năng giảm",
+      "stopped": "Đã dừng",
+      "error": "Gặp sự cố",
+      "pending": "Chờ xử lý"
+    }
+  },
+  "errors": {
+    "notFound": "Không tìm thấy trang yêu cầu",
+    "serverError": "Lỗi máy chủ nội bộ",
+    "unauthorized": "Bạn không có quyền truy cập",
+    "tryAgain": "Vui lòng thử lại sau"
+  }
+}
