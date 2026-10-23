@@ -10,165 +10,232 @@ export default function Home() {
     const metrics = [
         {
             label: t('dashboard.activeServices'),
-            value: '18 / 20',
+            value: '18',
+            unit: '/ 20',
             subtext: t('system.status.running'),
-            status: 'success',
-            icon: (
-                <svg className="w-5 h-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-            ),
+            status: 'pass',
         },
         {
             label: t('dashboard.cpuUsage'),
-            value: '28.4%',
+            value: '28.4',
+            unit: '%',
             subtext: '4 Cores @ 3.6GHz',
-            status: 'info',
-            icon: (
-                <svg className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-            ),
+            status: 'active',
         },
         {
             label: t('dashboard.ramUsage'),
-            value: '10.2 / 16 GB',
+            value: '10.2',
+            unit: 'GB',
             subtext: t('system.status.healthy'),
-            status: 'success',
-            icon: (
-                <svg className="w-5 h-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-            ),
+            status: 'pass',
         },
         {
             label: t('dashboard.diskUsage'),
-            value: '245 / 512 GB',
+            value: '245',
+            unit: 'GB',
             subtext: t('system.status.pending'),
-            status: 'warning',
-            icon: (
-                <svg className="w-5 h-5 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                </svg>
-            ),
+            status: 'warn',
         },
     ];
 
+    const timelineEvents = [
+        { span: 'API Gateway Ingress', start: '12%', duration: '45%', status: 'PASS', time: '12ms' },
+        { span: 'Auth Middleware Session', start: '25%', duration: '30%', status: 'PASS', time: '8ms' },
+        { span: 'Database Connection Pool', start: '40%', duration: '55%', status: 'ACTIVE', time: '24ms' },
+        { span: 'Cluster Health Sentinel', start: '10%', duration: '20%', status: 'WARN', time: '5ms' },
+    ];
+
     return (
-        <div className="min-h-screen flex flex-col bg-background text-foreground font-sans selection:bg-primary selection:text-white">
+        <div className="min-h-screen flex flex-col bg-[#000000] text-[#FFFFFF] font-sans selection:bg-[#52a8ff] selection:text-[#000000] relative overflow-hidden">
+            {/* Subtle Radial Glow in background */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[350px] bg-[radial-gradient(ellipse_at_top,rgba(82,168,255,0.12)_0%,transparent_70%)] pointer-events-none" />
+
             {/* Top Navigation Bar */}
-            <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-card/80 px-6 backdrop-blur-md">
+            <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-white/[0.145] bg-[#000000]/80 px-6 backdrop-blur-md">
                 <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white font-bold shadow-sm">
+                    <div className="flex h-8 w-8 items-center justify-center bg-[#FFFFFF] text-[#121212] font-mono font-bold text-xs">
                         SM
                     </div>
                     <div>
-                        <h1 className="text-sm font-semibold tracking-tight leading-none text-foreground">
+                        <h1 className="text-sm font-semibold tracking-tight leading-none text-[#FFFFFF]">
                             {t('common.appName')}
                         </h1>
-                        <span className="text-[11px] text-muted-foreground font-medium">Enterprise Edition</span>
+                        <span className="text-[11px] text-[#999999] font-mono">DARK TECH // ENTERPRISE</span>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-success/10 border border-success/20 text-xs font-medium text-success">
-                        <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                        {t('system.status.healthy')}
+                    {/* Status Chip (Pill, 100px radius per /style-md) */}
+                    <div className="v-chip">
+                        <span className="v-chip-dot bg-[#62c073]" />
+                        <span>{t('system.status.healthy')}</span>
                     </div>
 
                     {/* Language Switcher */}
                     <LanguageSwitcher />
+
+                    {/* Header CTA: btn-square 0px radius */}
+                    <button
+                        type="button"
+                        className="btn-square text-xs px-3 py-1.5 hidden sm:inline-flex gap-1.5"
+                    >
+                        <span>Book Demo</span>
+                        <span className="text-[10px]">↗</span>
+                    </button>
                 </div>
             </header>
 
             {/* Main Content Area */}
-            <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-8">
+            <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-8 relative z-10">
                 {/* Hero / Header Section */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-border">
+                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-4 border-b border-white/[0.145]">
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-foreground">
+                        <span className="text-[11px] font-mono uppercase tracking-widest text-[#52a8ff] mb-1 block">
+                            System Telemetry & Controls
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl font-medium tracking-[-1.5px] text-[#FFFFFF] font-sans">
                             {t('dashboard.title')}
                         </h2>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm text-[#e7e7e7] mt-1 max-w-xl">
                             {t('dashboard.subtitle')}
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2">
+                        {/* Secondary Button */}
                         <button
                             type="button"
-                            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg border border-border bg-card hover:bg-muted text-foreground transition-colors shadow-sm"
+                            className="btn-square px-3.5 py-2 text-xs bg-[#1f1f1f] text-[#FFFFFF] border border-white/[0.145] hover:bg-[#2a2a2a] gap-2"
                         >
-                            <svg className="w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-3.5 h-3.5 text-[#999999]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             {t('common.refresh')}
                         </button>
+
+                        {/* Primary CTA: 0px border-radius, #FFFFFF bg, #121212 text */}
                         <button
                             type="button"
-                            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-lg bg-primary hover:bg-primary/90 text-white transition-colors shadow-sm"
+                            className="btn-square px-4 py-2 text-xs gap-2"
                         >
-                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            {t('dashboard.quickActions')}
+                            <span>{t('dashboard.quickActions')}</span>
+                            <span className="text-xs">↗</span>
                         </button>
                     </div>
                 </div>
 
-                {/* KPI Metrics Grid */}
+                {/* Metrics Grid: 4-column border-connected style with Geist Mono values */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {metrics.map((item, idx) => (
                         <div
                             key={idx}
-                            className="p-5 rounded-xl border border-border bg-card shadow-sm hover:border-primary/40 transition-all duration-200"
+                            className="p-5 bg-[#0a0a0a] border border-white/[0.145] transition-all hover:border-[#52a8ff]/40"
                         >
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-medium text-muted-foreground">{item.label}</span>
-                                <div className="p-2 rounded-lg bg-muted">{item.icon}</div>
-                            </div>
-                            <div className="mt-4">
-                                <div className="text-2xl font-bold tracking-tight text-foreground">{item.value}</div>
-                                <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1.5">
-                                    <span className={`inline-block w-1.5 h-1.5 rounded-full ${
-                                        item.status === 'success' ? 'bg-success' : item.status === 'warning' ? 'bg-warning' : 'bg-primary'
-                                    }`} />
-                                    {item.subtext}
+                                <span className="text-xs font-mono uppercase tracking-wider text-[#999999]">{item.label}</span>
+                                <div className="v-chip !px-2 !py-0.5 !gap-1.5 text-[11px]">
+                                    <span
+                                        className={`v-chip-dot ${item.status === 'pass'
+                                            ? 'bg-[#62c073]'
+                                            : item.status === 'warn'
+                                                ? 'bg-[#999999]'
+                                                : 'bg-[#52a8ff]'
+                                            }`}
+                                    />
+                                    <span>{item.status.toUpperCase()}</span>
                                 </div>
+                            </div>
+
+                            <div className="mt-5 flex items-baseline gap-1.5">
+                                <span className="text-4xl font-mono tracking-[-2px] text-[#FFFFFF]">
+                                    {item.value}
+                                </span>
+                                <span className="text-sm font-mono text-[#999999]">
+                                    {item.unit}
+                                </span>
+                            </div>
+
+                            <div className="text-xs font-mono text-[#999999] mt-2 flex items-center gap-1.5">
+                                <span>{item.subtext}</span>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* System Specs & Terminal Info (Monospace test) */}
-                <div className="p-6 rounded-xl border border-border bg-card shadow-sm space-y-4">
-                    <div className="flex items-center justify-between">
+                {/* Event Stream / Timeline Progress Section (Style-MD signature) */}
+                <div className="bg-[#0a0a0a] border border-white/[0.145] p-6 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/[0.08]">
                         <div className="flex items-center gap-2.5">
-                            <span className="p-1.5 rounded bg-primary/10 text-primary">
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </span>
-                            <h3 className="text-base font-semibold text-foreground">
-                                {t('nav.logs')} & {t('system.status.running')} Details
+                            <span className="w-2 h-2 bg-[#52a8ff] inline-block" />
+                            <h3 className="text-sm font-semibold tracking-wide text-[#FFFFFF] uppercase font-mono">
+                                Event Stream // Trace [0x88F-2A]
                             </h3>
                         </div>
-                        <span className="text-xs font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground">
-                            Locale: {locale.toUpperCase()}
+                        <div className="flex items-center gap-2 text-xs font-mono text-[#999999]">
+                            <span className="v-chip !py-0.5 !px-2 text-[11px]">
+                                <span className="v-chip-dot bg-[#62c073]" />
+                                PASS: 100%
+                            </span>
+                            <span>SPAN COUNT: 4</span>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3 font-mono text-xs">
+                        {timelineEvents.map((event, idx) => (
+                            <div
+                                key={idx}
+                                className="grid grid-cols-12 items-center gap-3 py-2 px-3 bg-[#000000]/60 border border-white/[0.06] hover:border-white/[0.15] transition-colors"
+                            >
+                                <span className="col-span-4 sm:col-span-3 text-[#FFFFFF] truncate">
+                                    {event.span}
+                                </span>
+
+                                {/* Progress Bar column (1.5h relative bg, rounded-sm 2px) */}
+                                <div className="col-span-6 sm:col-span-7 relative h-1.5 bg-transparent">
+                                    <div
+                                        className={`absolute top-0 bottom-0 rounded-[2px] ${event.status === 'ACTIVE'
+                                            ? 'bg-[#52a8ff]'
+                                            : 'bg-white/[0.18]'
+                                            }`}
+                                        style={{ left: event.start, width: event.duration }}
+                                    />
+                                </div>
+
+                                <div className="col-span-2 text-right text-[#999999] text-[11px]">
+                                    {event.time}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Monospace System Logs Card */}
+                <div className="bg-[#0a0a0a] border border-white/[0.145] p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 bg-[#62c073] rounded-full inline-block" />
+                            <h3 className="text-xs font-mono uppercase tracking-wider text-[#FFFFFF]">
+                                {t('nav.logs')}
+                            </h3>
+                        </div>
+                        <span className="text-[11px] font-mono px-2 py-0.5 rounded-[100px] bg-[#1f1f1f] text-[#999999]">
+                            LOCALE: {locale.toUpperCase()}
                         </span>
                     </div>
 
-                    <div className="rounded-lg bg-sidebar p-4 font-mono text-xs text-sidebar-foreground space-y-2 border border-border/40 overflow-x-auto">
-                        <div className="flex gap-4">
-                            <span className="text-muted-foreground select-none">HOST:</span>
-                            <span className="text-success">127.0.0.1</span>
-                            <span className="text-muted-foreground select-none">PORT:</span>
-                            <span className="text-primary font-bold">8888</span>
-                            <span className="text-muted-foreground select-none">RUNTIME:</span>
-                            <span>Next.js 16.4.2 (React 19)</span>
+                    <div className="bg-[#000000] p-4 font-mono text-xs text-[#e7e7e7] space-y-2 border border-white/[0.08] overflow-x-auto">
+                        <div className="flex flex-wrap gap-4 text-xs">
+                            <span className="text-[#999999]">HOST:</span>
+                            <span className="text-[#62c073]">127.0.0.1</span>
+                            <span className="text-[#999999]">PORT:</span>
+                            <span className="text-[#52a8ff] font-bold">8888</span>
+                            <span className="text-[#999999]">THEME:</span>
+                            <span className="text-[#FFFFFF]">Dark Tech (/style-md)</span>
+                            <span className="text-[#999999]">FONTS:</span>
+                            <span>Inter Display / Geist Mono</span>
                         </div>
-                        <div className="text-muted-foreground border-t border-white/10 pt-2">
-                            [System-Log] 2026-10-23T16:53:00Z - i18n initialized with locale: <span className="text-warning font-bold">{locale}</span>. Theme tokens synchronized with Tailwind v4 inline specs.
+                        <div className="text-[#999999] border-t border-white/[0.08] pt-2 text-[11px]">
+                            [System-Log] 2026-10-23T17:15:00Z - /style-md active: 0px square buttons, 100px pill status chips, #0a0a0a cards with 1px border rgba(255,255,255,0.145).
                         </div>
                     </div>
                 </div>

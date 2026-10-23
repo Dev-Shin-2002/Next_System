@@ -38,7 +38,7 @@ export function LanguageSwitcher({ className = '', variant = 'pill' }: LanguageS
 
     return (
         <div
-            className={`inline-flex items-center p-1 rounded-lg bg-muted border border-border ${className}`}
+            className={`inline-flex items-center p-1 rounded-[100px] bg-[#1f1f1f] border border-white/[0.145] ${className}`}
             role="group"
             aria-label={t('common.language')}
         >
@@ -51,9 +51,9 @@ export function LanguageSwitcher({ className = '', variant = 'pill' }: LanguageS
                         key={loc}
                         type="button"
                         onClick={() => setLocale(loc)}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-md transition-all duration-200 ${isActive
-                            ? 'bg-primary text-white shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-card/50'
+                        className={`flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-[100px] transition-all duration-150 ${isActive
+                            ? 'bg-white text-[#121212] font-semibold'
+                            : 'text-[#999999] hover:text-white hover:bg-white/5'
                             }`}
                         aria-pressed={isActive}
                         title={config.name}
