@@ -1,11 +1,11 @@
 {
-  "name": "app",
+  "name": "system-manager",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --env-file-if-exists=.env run.mjs dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node --env-file-if-exists=.env run.mjs start",
     "lint": "eslint"
   },
   "dependencies": {
