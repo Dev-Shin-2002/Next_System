@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useTranslation } from '@/i18n';
-import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 export default function AdminDashboardPage() {
     const { t, locale } = useTranslation();
