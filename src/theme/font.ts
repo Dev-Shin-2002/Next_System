@@ -1,12 +1,12 @@
-import { Inter, Geist_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 
 /**
  * Dark Tech Aesthetic Typography System (/style-md)
  * 
  * Strict specifications:
  * - Headlines: 'Inter Display' (font-weight: 500, letter-spacing: -1px to -3.36px)
- * - Data, metrics, IDs, logs: 'Geist Mono' (#999999)
- * - Body: 'Inter'
+ * - Data, metrics, IDs, logs: 'JetBrains Mono' (#999999) with full Vietnamese diacritics
+ * - Body & UI: 'Inter'
  */
 
 // Body / Sans font (Inter)
@@ -24,8 +24,8 @@ export const fontDisplay = Inter({
     axes: ['opsz'],
 });
 
-// Rigorous Monospace for data integrity, metrics, and IDs ('Geist Mono')
-export const fontMono = Geist_Mono({
+// Rigorous Monospace for data integrity, metrics, and IDs ('JetBrains Mono')
+export const fontMono = JetBrains_Mono({
     subsets: ['latin', 'vietnamese'],
     variable: '--font-mono',
     display: 'swap',
@@ -34,7 +34,7 @@ export const fontMono = Geist_Mono({
 export const FONTS = {
     sans: 'var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     display: 'var(--font-display), "Inter Display", var(--font-sans), sans-serif',
-    mono: 'var(--font-mono), "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
+    mono: 'var(--font-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
 } as const;
 
 export const TYPOGRAPHY_SPECS = {
