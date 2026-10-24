@@ -92,7 +92,10 @@ export function RegisterForm() {
         type="text"
         placeholder={t('auth.namePlaceholder')}
         value={name}
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => {
+          setName(e.target.value);
+          if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+        }}
         error={errors.name}
         required
         autoComplete="name"
@@ -104,7 +107,10 @@ export function RegisterForm() {
         type="email"
         placeholder={t('auth.emailPlaceholder')}
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+        }}
         error={errors.email}
         required
         autoComplete="email"
@@ -116,7 +122,10 @@ export function RegisterForm() {
         type="password"
         placeholder={t('auth.passwordPlaceholder')}
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => {
+          setPassword(e.target.value);
+          if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
+        }}
         error={errors.password}
         required
         autoComplete="new-password"
@@ -128,7 +137,10 @@ export function RegisterForm() {
         type="password"
         placeholder={t('auth.confirmPasswordPlaceholder')}
         value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={(e) => {
+          setConfirmPassword(e.target.value);
+          if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: undefined }));
+        }}
         error={errors.confirmPassword}
         required
         autoComplete="new-password"
@@ -137,7 +149,10 @@ export function RegisterForm() {
 
       <Checkbox
         checked={agreeTerms}
-        onChange={(e) => setAgreeTerms(e.target.checked)}
+        onChange={(e) => {
+          setAgreeTerms(e.target.checked);
+          if (errors.terms) setErrors((prev) => ({ ...prev, terms: undefined }));
+        }}
         error={errors.terms}
         disabled={isSubmitting}
         required

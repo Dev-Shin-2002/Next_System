@@ -59,15 +59,17 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(functi
     };
 
     const hasError = Boolean(error);
+    const showError = hasError && !isChecked;
+    const hasDescription = Boolean(description);
 
     return (
         <div className={cx('flex flex-col gap-1', className)} style={style}>
             <label
                 htmlFor={inputId}
-                className="dt-checkbox"
+                className={cx('dt-checkbox', hasDescription && 'dt-checkbox--with-desc')}
                 data-checked={isChecked ? 'true' : undefined}
                 data-disabled={disabled ? 'true' : undefined}
-                data-invalid={hasError ? 'true' : undefined}
+                data-invalid={showError ? 'true' : undefined}
             >
                 <input
                     ref={ref}
@@ -77,8 +79,8 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(functi
                     onChange={handleChange}
                     disabled={disabled}
                     required={required}
-                    aria-invalid={hasError ? true : undefined}
-                    aria-describedby={hasError ? errorId : undefined}
+                    aria-invalid={showError ? true : undefined}
+                    aria-describedby={showError ? errorId : undefined}
                     className="dt-checkbox__input"
                     {...rest}
                 />
@@ -88,12 +90,12 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(functi
                 </span>
 
                 {label || description ? (
-                    <span className="dt-checkbox__label flex flex-col gap-0.5">
+                    <span className="dt-checkbox__label">
                         {label ? (
-                            <span>
+                            <span className="inline-flex items-center">
                                 {label}
                                 {required ? (
-                                    <span aria-hidden="true" style={{ marginLeft: 4, color: '#ef4444' }}>
+                                    <span aria-hidden="true" style={{ marginLeft: 4, color: '#f87171' }}>
                                         *
                                     </span>
                                 ) : null}
@@ -108,8 +110,8 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(functi
                 ) : null}
             </label>
 
-            {hasError ? (
-                <span id={errorId} role="alert" className="text-xs text-[#ef4444] font-sans pl-6">
+            {showError ? (
+                <span id={errorId} role="alert" className="text-xs text-[#f87171] font-sans pl-[26px]">
                     {error}
                 </span>
             ) : null}

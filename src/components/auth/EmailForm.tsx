@@ -70,7 +70,10 @@ export function EmailForm() {
         type="email"
         placeholder={t('auth.emailPlaceholder')}
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+        }}
         error={errors.email}
         required
         autoComplete="email"
@@ -83,7 +86,10 @@ export function EmailForm() {
           type="password"
           placeholder={t('auth.passwordPlaceholder')}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }));
+          }}
           error={errors.password}
           required
           autoComplete="current-password"

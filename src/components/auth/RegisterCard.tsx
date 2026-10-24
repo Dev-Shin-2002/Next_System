@@ -8,7 +8,6 @@ import { Logo } from '@/components/common/Logo';
 import { Typography } from '@/components/common/Typography';
 import { RegisterForm } from './RegisterForm';
 import { OAuthButtons } from './OAuthButtons';
-import { TOKENS } from '@/theme';
 
 export function RegisterCard() {
   const { t } = useTranslation();
@@ -21,12 +20,7 @@ export function RegisterCard() {
   };
 
   return (
-    <div
-      className="w-full max-w-[440px] bg-[#0a0a0a] border border-white/15 p-8 flex flex-col gap-6 shadow-2xl relative"
-      style={{
-        borderRadius: TOKENS.radius.card, // 0px brutalist
-      }}
-    >
+    <div className="dt-auth-card">
       {/* Top subtle blue laser accent line */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#52a8ff] to-transparent opacity-80" />
 
