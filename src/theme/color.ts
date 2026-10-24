@@ -19,8 +19,8 @@ export const COLORS = {
     brand: {
         accent: '#52a8ff',      // Active states, timeline active, focus
         success: '#62c073',     // Positive indicator / PASS status
-        warning: '#999999',     // WARN status / data / metrics
-        error: '#ededed',       // ERROR / FAIL status
+        warning: '#f59e0b',     // WARN status / data / metrics
+        error: '#ef4444',       // ERROR / FAIL status
         cta: {
             bg: '#FFFFFF',
             text: '#121212',
@@ -38,7 +38,7 @@ export const COLORS = {
         ring: 'rgba(82, 168, 255, 0.35)',
     },
 
-    // Status System (Strictly mapped to style-md)
+    // Status System (Strictly mapped to style-md) 
     status: {
         pass: {
             dot: '#62c073',
@@ -46,12 +46,17 @@ export const COLORS = {
             bg: '#1f1f1f',
         },
         warn: {
-            dot: '#999999',
+            dot: '#f59e0b',
             text: '#999999',
             bg: '#1f1f1f',
         },
         fail: {
-            dot: '#ededed',
+            dot: '#ef4444',
+            text: '#999999',
+            bg: '#1f1f1f',
+        },
+        offline: {
+            dot: '#9ca3af',
             text: '#999999',
             bg: '#1f1f1f',
         },
