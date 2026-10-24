@@ -30,7 +30,7 @@ export function AdminBreadcrumb() {
       <Link href="/admin" className="text-[#999999] hover:text-white transition-colors">
         SYSTEM
       </Link>
-      <span className="text-white/20 select-none">//</span>
+      <span className="text-white/20 select-none">{'//'}</span>
       <span className="text-white font-medium uppercase truncate max-w-[200px] sm:max-w-none">
         {currentTitle}
       </span>

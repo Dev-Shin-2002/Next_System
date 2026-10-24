@@ -73,12 +73,13 @@ export function AdminTelemetryProvider({ children }: { children: React.ReactNode
   }, [fetchTelemetry]);
 
   useEffect(() => {
-    // Initial fetch on mount
-    fetchTelemetry();
+    let timeoutId: NodeJS.Timeout | null = null;
 
     const startPolling = () => {
       if (!intervalRef.current) {
-        intervalRef.current = setInterval(fetchTelemetry, CONFIG.dashboard.refreshIntervalMs);
+        intervalRef.current = setInterval(() => {
+          void fetchTelemetry();
+        }, CONFIG.dashboard.refreshIntervalMs);
       }
     };
 
@@ -91,17 +92,23 @@ export function AdminTelemetryProvider({ children }: { children: React.ReactNode
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        fetchTelemetry();
+        void fetchTelemetry();
         startPolling();
       } else {
         stopPolling();
       }
     };
 
+    // Schedule initial telemetry sync asynchronously to avoid synchronous setState in effect
+    timeoutId = setTimeout(() => {
+      void fetchTelemetry();
+    }, 0);
+
     startPolling();
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
+      if (timeoutId) clearTimeout(timeoutId);
       stopPolling();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };

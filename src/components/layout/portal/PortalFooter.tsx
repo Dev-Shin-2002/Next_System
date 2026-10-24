@@ -26,11 +26,11 @@ export function PortalFooter() {
           <Link href="/docs" className="hover:text-[#FFFFFF] transition-colors">
             DOCS
           </Link>
-          <span className="text-white/20">//</span>
+          <span className="text-white/20">{'//'}</span>
           <Link href="/status" className="hover:text-[#FFFFFF] transition-colors">
             TELEMETRY STATUS
           </Link>
-          <span className="text-white/20">//</span>
+          <span className="text-white/20">{'//'}</span>
           <span>VERSION {statusData.version}</span>
         </div>
 
