@@ -21,7 +21,7 @@ export function LanguageSwitcher({ className = '', variant = 'pill' }: LanguageS
                     id="language-select"
                     value={locale}
                     onChange={(e) => setLocale(e.target.value as Locale)}
-                    className="appearance-none bg-card text-foreground border border-border rounded-lg py-1.5 pl-3 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer transition-colors"
+                    className="appearance-none bg-card text-foreground border border-border py-1.5 pl-3 pr-8 text-xs font-mono font-medium focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)] cursor-pointer transition-colors rounded-none"
                 >
                     {SUPPORTED_LOCALES.map((loc) => (
                         <option key={loc} value={loc} className="bg-card text-foreground">
@@ -29,7 +29,7 @@ export function LanguageSwitcher({ className = '', variant = 'pill' }: LanguageS
                         </option>
                     ))}
                 </select>
-                <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">
                     ▼
                 </span>
             </div>
@@ -38,7 +38,7 @@ export function LanguageSwitcher({ className = '', variant = 'pill' }: LanguageS
 
     return (
         <div
-            className={`inline-flex items-center p-1 rounded-[100px] bg-[#1f1f1f] border border-white/[0.145] ${className}`}
+            className={`inline-flex items-center p-0.5 rounded-[100px] bg-[#1f1f1f] border border-[var(--border)] ${className}`}
             role="group"
             aria-label={t('common.language')}
         >
@@ -51,11 +51,12 @@ export function LanguageSwitcher({ className = '', variant = 'pill' }: LanguageS
                         key={loc}
                         type="button"
                         onClick={() => setLocale(loc)}
-                        className={`flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-[100px] transition-all duration-150 ${isActive
+                        className={`flex items-center gap-1 px-2.5 py-0.5 text-[11px] font-mono rounded-[100px] transition-all duration-150 ${isActive
                             ? 'bg-white text-[#121212] font-semibold'
                             : 'text-[#999999] hover:text-white hover:bg-white/5'
                             }`}
                         aria-pressed={isActive}
+                        aria-label={`Switch to ${config.name}`}
                         title={config.name}
                     >
                         <span>{config.flag}</span>

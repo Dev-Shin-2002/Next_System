@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslation } from '@/i18n';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 
 export default function Home() {
     const { t, locale } = useTranslation();
