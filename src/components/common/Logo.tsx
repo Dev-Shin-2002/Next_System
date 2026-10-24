@@ -60,7 +60,7 @@ export function LogoMark({
                 height: s.box,
                 flexShrink: 0,
                 background: '#FFFFFF',
-                borderRadius: TOKENS.radius.none, // 0px brutalist contrast
+                borderRadius: TOKENS.radius.none, // 0px brutalist contrast 
                 userSelect: 'none',
                 padding: size === 'sm' ? '3px 4px' : '4px 6px',
                 boxSizing: 'border-box',
