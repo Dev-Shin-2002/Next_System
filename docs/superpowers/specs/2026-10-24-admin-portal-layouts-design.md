@@ -3,7 +3,7 @@
 **Date:** 2026-10-24  
 **Project:** System Manager (`system-manager`)  
 **Design Theme:** Dark Tech Aesthetic (`/style-md`)  
-**Status:** Approved for Implementation (v2 Refined)  
+**Status:** Approved for Implementation (v3 Finalized)  
 
 ---
 
@@ -11,25 +11,29 @@
 
 This specification defines the complete architectural design, component decomposition, state management, security boundaries, and responsive behaviors for two distinct layouts in the **System Manager** application:
 1. **Admin Layout (`(admin)`)**: A high-density system management workspace featuring a 240px ↔ 64px collapsible sidebar, dynamic telemetry status header, breadcrumb navigation, and responsive mobile drawer for operators.
-2. **Portal Layout (`(portal)`)**: A public-facing gateway and documentation portal featuring a sticky navigation bar, brand highlights, language switcher, public status indicator, and sticky footer.
+2. **Portal Layout (`(portal)`)**: A public-facing gateway and documentation portal featuring a sticky navigation bar, language switcher, public status indicator, and sticky footer.
 
 ### 1.1. Canonical Design Token Mapping
-All layouts and components strictly enforce the **Dark Tech Aesthetic (/style-md)** semantic tokens without ad-hoc inline hex codes:
+All layouts and components strictly enforce the **Dark Tech Aesthetic (/style-md)** semantic tokens defined in `src/theme/tokens.ts` and `src/theme/color.ts`:
 
 | Semantic Role | CSS Variable / Token | Canonical Value | Usage & Visual Specs |
 | :--- | :--- | :--- | :--- |
 | **Base Canvas** | `var(--background)` | `#000000` | Deep black background for entire app |
-| **Card Surface** | `var(--card)` | `#0a0a0a` | Container surface with 1px border `rgba(255, 255, 255, 0.145)` |
+| **Card Surface** | `var(--card)` | `#0a0a0a` | Container surface with 1px border `var(--border)` |
+| **Border** | `var(--border)` | `rgba(255, 255, 255, 0.145)` | Universal subtle tech divider and container stroke |
 | **Surface Active**| `var(--muted)` | `#1f1f1f` | Active navigation background, chip background |
+| **Text Muted** | `var(--muted-foreground)` | `#999999` | Chip text, labels, secondary metadata |
 | **Primary Accent**| `var(--color-primary)` | `#52a8ff` | Focus ring, active item left border, interactive accents |
-| **Status Pass** | `var(--color-status-pass)` | `#62c073` | PASS: HEALTHY indicator dot and badges |
+| **Status Pass** | `var(--color-status-pass)` | `#62c073` | PASS: HEALTHY indicator dot |
 | **Status Warn** | `var(--color-status-warn)` | `#f59e0b` | WARN: DEGRADED indicator with alert triangle icon |
 | **Status Fail** | `var(--color-status-fail)` | `#ef4444` | FAIL: DOWN indicator with error icon |
-| **Status Offline**| `var(--color-status-offline)`| `#6b7280` | OFFLINE: UNREACHABLE indicator |
+| **Status Offline**| `var(--color-status-offline)`| `#9ca3af` | OFFLINE: UNREACHABLE indicator dot (contrast ratio > 4.5:1) |
 | **Status Loading**| `var(--color-status-loading)`| `#52a8ff` | CONNECTING... indicator with pulse animation |
 | **CTA Button** | `.btn-square` | `#FFFFFF` bg / `#121212` text | 0px border-radius, font-weight 600 |
-| **Status Chip** | `.v-chip` | `#1f1f1f` bg / `#999999` text | 100px pill radius, 6px dot, uppercase mono |
-| **Sidebar Width** | `--sidebar-width` / `--sidebar-width-collapsed` | `240px` / `64px` | Desktop sidebar dimensions |
+| **Status Chip** | `.v-chip` | `#1f1f1f` bg / `#999999` text | 100px pill radius, 6px colored dot, uppercase mono |
+| **Sidebar Width** | `--sidebar-width` / `--sidebar-width-collapsed` | `240px` / `64px` | Desktop sidebar canonical dimensions |
+
+*Note on Status Chips*: In `.v-chip`, the label text consistently remains `var(--muted-foreground)` (`#999999`) across all states to preserve the Dark Tech monospace aesthetic; only the status dot and accompanying icon change color according to status.
 
 ---
 
@@ -45,7 +49,7 @@ e:\System_Manager\app\src\
 │   │
 │   ├── api/
 │   │   └── public-status/
-│   │       └── route.ts             # Public API returning operational health, version, uptime
+│   │       └── route.ts             # Public API returning operational health, version, mocked uptime
 │   │
 │   ├── (portal)/                    # Route Group: Public & Portal Pages
 │   │   ├── layout.tsx               # Server Component wrapping children with <PortalLayout>
@@ -66,7 +70,7 @@ e:\System_Manager\app\src\
 │               └── page.tsx         # Catch-all route calling notFound() for unmatched /admin/* URLs
 ```
 
-> **Cleanup Notice**: The empty directory `src/app/layout/` must be deleted. Its name coincides with the convention `layout.tsx`, leading to developer confusion, and it is not a valid Route Group.
+> **Cleanup Notice**: The empty directory `src/app/layout/` must be deleted because its name causes confusion with `layout.tsx` and it is not a valid Route Group.
 
 ### 2.2. Middleware & Admin Route Interception (`src/middleware.ts`)
 ```typescript
@@ -77,11 +81,14 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   if (pathname.startsWith('/admin')) {
-    // Placeholder session inspection (in dev mode, allow passage unless explicitly configured)
+    // Structural placeholder check (NOT cryptographic authentication).
+    // In production, real auth must verify token signature/expiry, and
+    // Server Actions/route handlers under /admin must independently re-validate credentials.
     const sessionToken = request.cookies.get('sm_session')?.value;
-    const authRequired = process.env.NEXT_PUBLIC_AUTH_REQUIRED === 'true';
+    const authRequired = process.env.AUTH_REQUIRED === 'true'; // Server-side environment variable
 
     if (authRequired && !sessionToken) {
+      // Note: /login is currently out of scope; redirection will 404 if AUTH_REQUIRED is enabled without /login.
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('from', pathname);
       return NextResponse.redirect(loginUrl);
@@ -92,6 +99,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // Can be expanded to ['/admin/:path*', '/api/admin/:path*'] when admin API endpoints are added.
   matcher: ['/admin/:path*'],
 };
 ```
@@ -114,7 +122,7 @@ src/
 │       ├── admin/
 │       │   ├── AdminLayout.tsx      # Client Component: single source of truth for layout state
 │       │   ├── AdminSidebar.tsx     # Collapsible sidebar (desktop) & drawer (mobile z-50)
-│       │   ├── AdminHeader.tsx      # Header with hamburger, breadcrumbs, status chip, CTA
+│       │   ├── AdminHeader.tsx      # Header with id="admin-header", hamburger, breadcrumbs, status chip, CTA
 │       │   └── AdminBreadcrumb.tsx  # Dynamic path-to-label translator with fallback formatting
 │       ├── portal/
 │       │   ├── PortalLayout.tsx     # Shell: min-h-screen flex flex-col with sticky footer
@@ -147,7 +155,7 @@ src/
    - `AdminLayout` is a Client Component (`"use client"`) managing `isCollapsed` and `isMobileOpen`.
    - Renders the outer wrapper with:
      - `data-collapsed={isCollapsed}`
-     - Style `--sidebar-current-width: ${isCollapsed ? '64px' : '240px'}`.
+     - Style `--sidebar-current-width: ${isCollapsed ? 'var(--sidebar-width-collapsed)' : 'var(--sidebar-width)'}`.
    - Main content viewport applies:
      ```tsx
      <main id="main-content" className="flex-1 ml-0 md:ml-[var(--sidebar-current-width)] transition-[margin] duration-200 ease-in-out p-6">
@@ -158,11 +166,11 @@ src/
 
 ### 4.2. Mobile Drawer (< md)
 - On `< md`, the sidebar transforms into an off-canvas drawer:
-  - Width: Fixed at `240px` (regardless of desktop collapse cookie).
+  - Width: Fixed at `var(--sidebar-width)` (`240px`), regardless of desktop collapse cookie.
   - Layer: `z-50` with `-translate-x-full` when closed, `translate-x-0` when open.
   - Scrim: Backdrop element at `z-40` with `bg-black/80 backdrop-blur-sm`.
-  - Accessible Focus Trap:
-    - When `isMobileOpen === true`, apply `inert` attribute to `#main-content` and `#admin-header`.
+  - Accessible Focus Trap (React 19.3.0 Native `inert` support):
+    - When `isMobileOpen === true`, apply `inert={isMobileOpen}` (boolean prop supported in React 19) to `#main-content` and `#admin-header`.
     - Auto-focuses first focusable element in drawer upon opening; returns focus to hamburger button upon closing.
   - Body scroll lock: Sets `document.body.style.overflow = 'hidden'` while open.
   - Dismissal: Auto-closes on route change (via `usePathname()`), `Escape` key press, or backdrop click.
@@ -187,7 +195,7 @@ export interface NavItem {
   - Dynamically resolved from `AdminTelemetryContext`.
   - Format: Hidden when `0` or `undefined`; formats as `99+` if count exceeds 99.
 - **Collapsed Sidebar Tooltips**:
-  - When collapsed to `64px`, labels are visually hidden and replaced by `aria-label={label}` plus a floating CSS tooltip (`left-full ml-2`) on hover/focus.
+  - When collapsed to `var(--sidebar-width-collapsed)`, labels are visually hidden and replaced by `aria-label={label}` plus a floating CSS tooltip (`left-full ml-2`) on hover/focus.
 
 ### 4.4. Dynamic Breadcrumbs (`AdminBreadcrumb.tsx`)
 - Maps current URL segments against `admin-nav.ts` using `labelKey`.
@@ -203,7 +211,7 @@ Status chip uses semantic variables with explicit visual cues:
 - **`pass` (Healthy)**: `var(--color-status-pass)` (`#62c073`), green dot, text `"PASS: HEALTHY"`.
 - **`warn` (Degraded)**: `var(--color-status-warn)` (`#f59e0b`), alert triangle icon, text `"WARN: DEGRADED"`.
 - **`fail` (Down / Critical)**: `var(--color-status-fail)` (`#ef4444`), error exclamation icon, text `"FAIL: DOWN"`.
-- **`offline` (Unreachable)**: `var(--color-status-offline)` (`#6b7280`), text `"OFFLINE: UNREACHABLE"`.
+- **`offline` (Unreachable)**: `var(--color-status-offline)` (`#9ca3af`), text `"OFFLINE: UNREACHABLE"`.
 - **`loading`**: `var(--color-status-loading)` (`#52a8ff`), pulse animation, text `"CONNECTING..."`.
 
 All status chips implement `role="status"` and `aria-live="polite"`.
@@ -212,10 +220,11 @@ All status chips implement `role="status"` and `aria-live="polite"`.
 - **Admin Scope (`src/providers/AdminTelemetryProvider.tsx`)**:
   - Polling interval: Configurable via `CONFIG.dashboard.refreshIntervalMs` (default 30,000ms).
   - Pauses polling when `document.visibilityState === 'hidden'`; immediately triggers a sync when returning to `visible`.
-  - Failure Resilience: After 3 consecutive failed fetches, status automatically transitions to `offline`.
+  - Failure Resilience: After 3 consecutive failed fetches, status automatically transitions to `offline`. The provider continues polling every 30s in the background; a single subsequent successful fetch will immediately recover status back to live telemetry.
   - Supplies `status`, `alertsCount`, and `activeTasks` across `AdminSidebar` and `AdminHeader`.
 - **Portal Scope & Public Endpoint (`/api/public-status`)**:
-  - Endpoint returns sanitized JSON: `{ status: "operational", uptime: 99.98, version: "0.1.0", updatedAt: ISOString }`.
+  - Route handler with `export const revalidate = 30;` to prevent redundant invocations.
+  - Returns sanitized JSON: `{ status: "operational", uptime: 99.98, version: "0.1.0", updatedAt: ISOString }` *(Note: uptime is mocked at 99.98 at this stage)*.
   - **Security Rule: Internal IP/Host (`127.0.0.1:8888`) is strictly prohibited on the public portal**.
   - `PortalFooter` and `/status` consume `/api/public-status`.
 
@@ -230,7 +239,7 @@ All status chips implement `role="status"` and `aria-live="polite"`.
 2. **Keyboard Focus**:
    - Focus ring using `var(--color-primary)` with `outline-offset-2`.
 3. **Semantic Landmarks**:
-   - Single `<h1>` per view, proper `<header>`, `<nav>`, `<aside>`, `<main>`, `<footer>` tags.
+   - Single `<h1>` per view, proper `<header id="admin-header">`, `<nav>`, `<aside>`, `<main id="main-content">`, `<footer>` tags.
 
 ---
 
@@ -238,13 +247,13 @@ All status chips implement `role="status"` and `aria-live="polite"`.
 
 - **In Scope**:
   - `AdminLayout`, `PortalLayout` and all listed child components.
-  - Route groups `app/(portal)` and `app/(admin)/admin` with error boundaries and 404 catch-alls.
+  - Route groups `app/(portal)` and `app/(admin)/admin` with error boundaries, loading skeletons, and 404 catch-alls.
   - Migration of telemetry dashboard to `app/(admin)/admin/page.tsx`.
   - Portal home, docs overview, and status page.
   - Public status API endpoint (`/api/public-status`).
   - Edge middleware placeholder (`src/middleware.ts`).
   - Navigation configs (`admin-nav.ts`, `portal-nav.ts`), icon registry, and shared `LanguageSwitcher`.
 - **Out of Scope**:
-  - Production OAuth/JWT authentication server implementation.
+  - Production OAuth/JWT authentication server implementation and real `/login` page UI.
   - Live WebSocket / SSE telemetry streaming backend (mocked polling provider used for layout UI).
   - Role-based database access control matrices.
