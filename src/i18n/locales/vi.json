@@ -79,5 +79,27 @@
     "serverError": "Lỗi máy chủ nội bộ",
     "unauthorized": "Bạn không có quyền truy cập",
     "tryAgain": "Vui lòng thử lại sau"
+  },
+  "auth": {
+    "loginTitle": "Đăng nhập",
+    "loginSubtitle": "Xác thực truy cập bảng điều khiển quản trị",
+    "emailLabel": "Email hoặc Tên đăng nhập",
+    "emailPlaceholder": "admin@system.local",
+    "passwordLabel": "Mật khẩu",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Quên mật khẩu?",
+    "signInButton": "Đăng nhập hệ thống",
+    "signingIn": "Đang xác thực...",
+    "orDivider": "hoặc tiếp tục với",
+    "oauthGithub": "Đăng nhập với GitHub",
+    "oauthGoogle": "Đăng nhập với Google",
+    "noAccount": "Chưa có tài khoản?",
+    "signUpLink": "Đăng ký tài khoản",
+    "backToHome": "Trở về trang chủ",
+    "errors": {
+      "emailRequired": "Vui lòng nhập email hợp lệ",
+      "passwordRequired": "Vui lòng nhập mật khẩu",
+      "invalidCredentials": "Email hoặc mật khẩu không chính xác"
+    }
   }
 }

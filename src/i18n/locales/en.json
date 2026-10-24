@@ -79,5 +79,27 @@
     "serverError": "Internal server error",
     "unauthorized": "Unauthorized access",
     "tryAgain": "Please try again later"
+  },
+  "auth": {
+    "loginTitle": "Sign In",
+    "loginSubtitle": "Authenticate to access system management console",
+    "emailLabel": "Email or Username",
+    "emailPlaceholder": "admin@system.local",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot password?",
+    "signInButton": "Sign In to System",
+    "signingIn": "Authenticating...",
+    "orDivider": "or continue with",
+    "oauthGithub": "Sign in with GitHub",
+    "oauthGoogle": "Sign in with Google",
+    "noAccount": "Don't have an account?",
+    "signUpLink": "Request access",
+    "backToHome": "Back to Home",
+    "errors": {
+      "emailRequired": "Please enter your email",
+      "passwordRequired": "Please enter your password",
+      "invalidCredentials": "Invalid email or password"
+    }
   }
 }
