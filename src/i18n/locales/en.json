@@ -96,9 +96,24 @@
     "noAccount": "Don't have an account?",
     "signUpLink": "Request access",
     "backToHome": "Back to Home",
+    "registerTitle": "Create Account",
+    "registerSubtitle": "Initialize a new system administrator account",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "Alex Mercer",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "termsAgree": "I agree to the Terms of Service & Privacy Policy",
+    "registerButton": "Create Admin Account",
+    "registering": "Initializing...",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInLink": "Sign in now",
     "errors": {
       "emailRequired": "Please enter your email",
       "passwordRequired": "Please enter your password",
+      "nameRequired": "Please enter your full name",
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "termsRequired": "Please agree to the Terms of Service",
       "invalidCredentials": "Invalid email or password"
     }
   }

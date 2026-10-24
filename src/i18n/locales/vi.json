@@ -96,9 +96,24 @@
     "noAccount": "Chưa có tài khoản?",
     "signUpLink": "Đăng ký tài khoản",
     "backToHome": "Trở về trang chủ",
+    "registerTitle": "Đăng ký tài khoản",
+    "registerSubtitle": "Khởi tạo tài khoản quản trị hệ thống mới",
+    "nameLabel": "Họ và tên",
+    "namePlaceholder": "Nguyễn Văn A",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "confirmPasswordPlaceholder": "••••••••",
+    "termsAgree": "Tôi đồng ý với Điều khoản dịch vụ & Chính sách bảo mật",
+    "registerButton": "Tạo tài khoản quản trị",
+    "registering": "Đang khởi tạo...",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "signInLink": "Đăng nhập ngay",
     "errors": {
       "emailRequired": "Vui lòng nhập email hợp lệ",
       "passwordRequired": "Vui lòng nhập mật khẩu",
+      "nameRequired": "Vui lòng nhập họ và tên",
+      "passwordMismatch": "Mật khẩu xác nhận không trùng khớp",
+      "passwordTooShort": "Mật khẩu phải chứa ít nhất 8 ký tự",
+      "termsRequired": "Vui lòng đồng ý với điều khoản sử dụng",
       "invalidCredentials": "Email hoặc mật khẩu không chính xác"
     }
   }
