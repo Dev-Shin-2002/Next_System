@@ -27,7 +27,27 @@
     "logs": "System Logs",
     "metrics": "Performance Metrics",
     "alerts": "Alerts",
-    "settings": "Settings"
+    "settings": "Settings",
+    "groups": {
+      "monitoring": "Monitoring",
+      "observability": "Observability",
+      "system": "System"
+    }
+  },
+  "portal": {
+    "nav": {
+      "overview": "Overview",
+      "docs": "Docs",
+      "status": "System Status"
+    },
+    "cta": {
+      "admin": "Admin Portal"
+    },
+    "title": "Enterprise System Management Portal",
+    "subtitle": "Distributed systems administration, real-time telemetry, and log streaming built on Dark Tech architecture.",
+    "allSystemsOperational": "All Systems Operational",
+    "uptime": "System Uptime",
+    "version": "Version"
   },
   "dashboard": {
     "title": "System Overview",

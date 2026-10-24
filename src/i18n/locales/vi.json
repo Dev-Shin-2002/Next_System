@@ -27,7 +27,27 @@
     "logs": "Nhật ký Logs",
     "metrics": "Hiệu năng Metrics",
     "alerts": "Cảnh báo",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "groups": {
+      "monitoring": "Giám sát",
+      "observability": "Quan sát & Logs",
+      "system": "Hệ thống"
+    }
+  },
+  "portal": {
+    "nav": {
+      "overview": "Tổng quan",
+      "docs": "Tài liệu",
+      "status": "Trạng thái"
+    },
+    "cta": {
+      "admin": "Vào Quản Trị"
+    },
+    "title": "Cổng Quản Trị & Vận Hành Hệ Thống",
+    "subtitle": "Nền tảng quản trị phân tán, giám sát tài nguyên và phân tích nhật ký thời gian thực theo tiêu chuẩn Dark Tech.",
+    "allSystemsOperational": "Tất cả dịch vụ hoạt động bình thường",
+    "uptime": "Thời gian hoạt động",
+    "version": "Phiên bản"
   },
   "dashboard": {
     "title": "Tổng quan hệ thống",
