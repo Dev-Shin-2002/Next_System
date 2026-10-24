@@ -7,6 +7,7 @@ import { useTranslation } from '@/i18n';
 import { PORTAL_NAV_ITEMS } from '@/config/portal-nav';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { IconRegistry } from '@/components/common/IconRegistry';
+import { Logo } from '@/components/common/Logo';
 
 export function PortalNavbar() {
   const { t } = useTranslation();
@@ -18,19 +19,11 @@ export function PortalNavbar() {
       <div className="max-w-7xl mx-auto h-full px-6 flex items-center justify-between">
         {/* Logo & Brand */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center bg-[#FFFFFF] text-[#121212] font-mono font-bold text-xs select-none">
-              SM
-            </div>
-            <div>
-              <span className="text-sm font-semibold tracking-tight leading-none text-[#FFFFFF] block">
-                {t('common.appName')}
-              </span>
-              <span className="text-[10px] text-[#999999] font-mono tracking-wider">
-                PORTAL // v0.1.0
-              </span>
-            </div>
-          </Link>
+          <Logo
+            href="/"
+            title={t('common.appName')}
+            subtitle="PORTAL // v0.1.0"
+          />
 
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-1">

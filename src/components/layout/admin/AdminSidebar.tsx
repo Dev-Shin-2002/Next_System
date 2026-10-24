@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/i18n';
 import { ADMIN_NAV_ITEMS, ADMIN_NAV_GROUPS, NavItem } from '@/config/admin-nav';
 import { IconRegistry } from '@/components/common/IconRegistry';
+import { Logo } from '@/components/common/Logo';
 import { useAdminTelemetry } from '@/providers/AdminTelemetryProvider';
 
 export interface AdminSidebarProps {
@@ -59,8 +60,8 @@ export function AdminSidebar({
                 <Link
                   href={item.href}
                   className={`flex items-center gap-3 px-3 py-2 text-xs font-mono transition-colors border-l-2 ${isActive
-                      ? 'border-[var(--color-primary)] bg-[var(--muted)] text-white font-medium'
-                      : 'border-transparent text-[#999999] hover:text-white hover:bg-white/5'
+                    ? 'border-[var(--color-primary)] bg-[var(--muted)] text-white font-medium'
+                    : 'border-transparent text-[#999999] hover:text-white hover:bg-white/5'
                     } ${isCollapsed ? 'justify-center' : ''}`}
                   aria-current={isActive ? 'page' : undefined}
                   aria-label={t(item.labelKey)}
@@ -105,21 +106,12 @@ export function AdminSidebar({
     <div className="flex flex-col h-full bg-[#000000] border-r border-[var(--border)] select-none">
       {/* Brand Header */}
       <div className="h-14 flex items-center justify-between px-3.5 border-b border-[var(--border)]">
-        <Link href="/admin" className="flex items-center gap-3 overflow-hidden">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#FFFFFF] text-[#121212] font-mono font-bold text-xs">
-            SM
-          </div>
-          {!isCollapsed && (
-            <div className="truncate">
-              <span className="text-sm font-semibold tracking-tight leading-none text-white block truncate">
-                {t('common.appName')}
-              </span>
-              <span className="text-[10px] text-[#999999] font-mono tracking-wider">
-                ADMIN CONSOLE
-              </span>
-            </div>
-          )}
-        </Link>
+        <Logo
+          href="/admin"
+          layout={isCollapsed ? 'mark-only' : 'horizontal'}
+          title={t('common.appName')}
+          subtitle="ADMIN CONSOLE"
+        />
 
         {/* Mobile close button */}
         <button
