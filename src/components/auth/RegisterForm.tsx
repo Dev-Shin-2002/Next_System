@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/i18n';
 import { TextField } from '@/components/common/TextField';
 import { Button } from '@/components/common/Button';
+import { Checkbox } from '@/components/common/Checkbox';
 import { TOKENS } from '@/theme';
 
 export function RegisterForm() {
@@ -134,27 +135,15 @@ export function RegisterForm() {
         disabled={isSubmitting}
       />
 
-      {/* Terms and conditions checkbox */}
-      <div className="flex flex-col gap-1 mt-1">
-        <label className="flex items-start gap-2.5 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={agreeTerms}
-            onChange={(e) => setAgreeTerms(e.target.checked)}
-            disabled={isSubmitting}
-            className="mt-0.5 accent-[#52a8ff] rounded-none cursor-pointer"
-            style={{ width: 14, height: 14 }}
-          />
-          <span className="text-xs font-sans text-[#999999] leading-tight">
-            {t('auth.termsAgree')}
-          </span>
-        </label>
-        {errors.terms ? (
-          <span className="text-xs text-[#ef4444] font-sans" role="alert">
-            {errors.terms}
-          </span>
-        ) : null}
-      </div>
+      <Checkbox
+        checked={agreeTerms}
+        onChange={(e) => setAgreeTerms(e.target.checked)}
+        error={errors.terms}
+        disabled={isSubmitting}
+        required
+        label={t('auth.termsAgree')}
+        style={{ marginTop: '0.25rem' }}
+      />
 
       <Button
         type="submit"

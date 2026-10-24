@@ -2,6 +2,7 @@ export * from './Typography';
 export * from './Input';
 export * from './TextField';
 export * from './Button';
+export * from './Checkbox';
 export * from './Logo';
 export * from './IconRegistry';
 export * from './LanguageSwitcher';

@@ -154,6 +154,77 @@
   border-color: #dc2626;
 }
 
+/* Dark Tech Checkbox System (/style-md) */
+.dt-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.dt-checkbox[data-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.dt-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.dt-checkbox__box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background-color: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0px !important;
+  transition: background-color 100ms ease, border-color 100ms ease, box-shadow 100ms ease;
+  box-sizing: border-box;
+}
+
+.dt-checkbox:hover .dt-checkbox__box {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.dt-checkbox__input:focus-visible + .dt-checkbox__box {
+  outline: 2px solid #52a8ff;
+  outline-offset: 2px;
+}
+
+.dt-checkbox[data-checked="true"] .dt-checkbox__box {
+  background-color: #52a8ff;
+  border-color: #52a8ff;
+  color: #000000;
+}
+
+.dt-checkbox[data-invalid="true"] .dt-checkbox__box {
+  border-color: #ef4444;
+}
+
+.dt-checkbox__label {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: #999999;
+  transition: color 100ms ease;
+}
+
+.dt-checkbox:hover .dt-checkbox__label {
+  color: #ffffff;
+}
+
 .v-chip {
   display: inline-flex;
   align-items: center;
