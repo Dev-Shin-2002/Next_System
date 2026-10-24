@@ -1,11 +1,10 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { useTranslation } from '@/i18n';
 import { Typography } from '@/components/common/Typography';
+import { Button } from '@/components/common/Button';
 import { IconRegistry } from '@/components/common/IconRegistry';
-import { TOKENS } from '@/theme';
 
 export default function AdminNotFound() {
   const { t } = useTranslation();
@@ -40,14 +39,14 @@ export default function AdminNotFound() {
           The requested admin path was not located within the current administration routing table.
         </Typography>
 
-        <Link
+        <Button
           href="/admin"
-          className="btn-square h-10 px-6 mt-3 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider bg-white text-[#121212] hover:bg-[#e7e7e7] transition-colors"
-          style={{ borderRadius: TOKENS.radius.button }}
+          variant="primary"
+          leftIcon={<IconRegistry name="chevron-left" size={14} />}
+          style={{ marginTop: '0.75rem' }}
         >
-          <IconRegistry name="chevron-left" size={14} />
-          <span>{t('nav.dashboard')}</span>
-        </Link>
+          {t('nav.dashboard')}
+        </Button>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useTranslation } from '@/i18n';
 import { Logo } from '@/components/common/Logo';
 import { Typography } from '@/components/common/Typography';
+import { Button } from '@/components/common/Button';
 import { IconRegistry } from '@/components/common/IconRegistry';
 import { TOKENS } from '@/theme';
 
@@ -101,23 +102,21 @@ export default function GlobalNotFound() {
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
-            <Link
+            <Button
               href="/"
-              className="btn-square h-10 px-6 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider bg-white text-[#121212] hover:bg-[#e7e7e7] transition-colors"
-              style={{ borderRadius: TOKENS.radius.button }}
+              variant="primary"
+              leftIcon={<IconRegistry name="chevron-left" size={14} />}
             >
-              <IconRegistry name="chevron-left" size={14} />
-              <span>RETURN TO PORTAL</span>
-            </Link>
+              RETURN TO PORTAL
+            </Button>
 
-            <Link
+            <Button
               href="/admin"
-              className="h-10 px-6 flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider bg-[#0a0a0a] text-white border border-white/15 hover:border-white/30 transition-colors"
-              style={{ borderRadius: TOKENS.radius.button }}
+              variant="secondary"
+              rightIcon={<IconRegistry name="chevron-right" size={14} />}
             >
-              <span>ADMIN CONSOLE</span>
-              <IconRegistry name="chevron-right" size={14} />
-            </Link>
+              ADMIN CONSOLE
+            </Button>
           </div>
         </div>
       </main>

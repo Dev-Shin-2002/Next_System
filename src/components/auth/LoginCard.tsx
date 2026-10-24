@@ -52,7 +52,7 @@ export function LoginCard() {
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/10" />
         </div>
-        <span className="relative px-3 bg-[#0a0a0a] font-mono text-[11px] uppercase tracking-wider text-[#999999]">
+        <span className="relative px-3 bg-[#0a0a0a] font-sans text-[11px] font-medium uppercase tracking-wider text-[#999999]">
           {t('auth.orDivider')}
         </span>
       </div>

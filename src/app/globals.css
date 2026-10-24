@@ -84,6 +84,76 @@
   background-color: #e7e7e7;
 }
 
+/* Dark Tech Button System (/style-md) */
+.dt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0px !important;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, opacity 120ms ease;
+  box-sizing: border-box;
+}
+
+.dt-btn:disabled,
+.dt-btn[data-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.dt-btn:focus-visible {
+  outline: 2px solid #52a8ff;
+  outline-offset: 2px;
+}
+
+.dt-btn--primary {
+  background-color: #ffffff;
+  color: #121212;
+  border-color: #ffffff;
+}
+.dt-btn--primary:hover:not(:disabled) {
+  background-color: #e7e7e7;
+  border-color: #e7e7e7;
+}
+
+.dt-btn--secondary {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.dt-btn--secondary:hover:not(:disabled) {
+  background-color: #161616;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.dt-btn--ghost {
+  background-color: transparent;
+  color: #999999;
+  border-color: transparent;
+}
+.dt-btn--ghost:hover:not(:disabled) {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.dt-btn--danger {
+  background-color: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+.dt-btn--danger:hover:not(:disabled) {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
 .v-chip {
   display: inline-flex;
   align-items: center;

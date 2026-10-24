@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/i18n';
 import { TextField } from '@/components/common/TextField';
+import { Button } from '@/components/common/Button';
 import { TOKENS } from '@/theme';
 
 export function EmailForm() {
@@ -57,7 +58,7 @@ export function EmailForm() {
       {errors.general ? (
         <div
           role="alert"
-          className="p-3 bg-red-950/40 border border-red-500/30 text-red-400 text-xs font-mono"
+          className="p-3 bg-red-950/40 border border-red-500/30 text-red-400 text-xs font-sans"
           style={{ borderRadius: TOKENS.radius.button }}
         >
           {errors.general}
@@ -91,25 +92,22 @@ export function EmailForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-[11px] font-mono text-[#999999] hover:text-[#52a8ff] transition-colors"
+            className="text-xs font-sans text-[#999999] hover:text-[#52a8ff] transition-colors"
           >
             {t('auth.forgotPassword')}
           </Link>
         </div>
       </div>
 
-      <button
+      <Button
         type="submit"
-        disabled={isSubmitting}
-        className="btn-square w-full h-10 mt-1 flex items-center justify-center font-mono font-semibold text-xs tracking-wider uppercase select-none transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        style={{
-          borderRadius: TOKENS.radius.button,
-          backgroundColor: '#FFFFFF',
-          color: '#121212',
-        }}
+        variant="primary"
+        fullWidth
+        isLoading={isSubmitting}
+        style={{ marginTop: '0.25rem' }}
       >
-        {isSubmitting ? t('auth.signingIn') : t('auth.signInButton')}
-      </button>
+        {t('auth.signInButton')}
+      </Button>
     </form>
   );
 }
