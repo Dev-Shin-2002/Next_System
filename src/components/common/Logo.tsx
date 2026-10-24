@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { COLORS, FONTS, TOKENS } from '@/theme';
 
 export type LogoSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -59,18 +60,29 @@ export function LogoMark({
                 height: s.box,
                 flexShrink: 0,
                 background: '#FFFFFF',
-                color: '#121212',
-                fontFamily: FONTS.mono,
-                fontWeight: 700,
-                fontSize: s.fontSize,
-                letterSpacing: '-0.02em',
                 borderRadius: TOKENS.radius.none, // 0px brutalist contrast
                 userSelect: 'none',
+                padding: size === 'sm' ? '3px 4px' : '4px 6px',
+                boxSizing: 'border-box',
                 boxShadow: '0 0 12px rgba(255, 255, 255, 0.08)',
                 ...style,
             }}
         >
-            SM
+            <Image
+                src="/next.svg"
+                alt="Brand Logo"
+                width={394}
+                height={80}
+                unoptimized
+                priority
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    display: 'block',
+                }}
+            />
         </div>
     );
 }
