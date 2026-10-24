@@ -22,7 +22,7 @@ export function LoginCard() {
 
   return (
     <div
-      className="w-full max-w-[420px] bg-[#0a0a0a] border border-white/15 p-8 flex flex-col gap-6 shadow-2xl relative"
+      className="w-full max-w-[440px] bg-[#0a0a0a] border border-white/15 p-8 flex flex-col gap-6 shadow-2xl relative"
       style={{
         borderRadius: TOKENS.radius.card, // 0px brutalist
       }}
