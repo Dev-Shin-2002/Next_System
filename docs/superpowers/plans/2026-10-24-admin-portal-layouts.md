@@ -24,7 +24,7 @@
 **Files:**
 - Modify: `src/app/globals.css`
 - Modify: `src/theme/tokens.ts`
-- Modify: `src/theme/color.ts`
+- Modify: `src/theme/color.ts` 
 
 **Interfaces:**
 - Produces: CSS variables in `:root`: `--sidebar-width`, `--sidebar-width-collapsed`, `--border`, `--color-status-pass`, `--color-status-warn`, `--color-status-fail`, `--color-status-offline`, `--color-status-loading`.
