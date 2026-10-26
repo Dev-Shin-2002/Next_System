@@ -1,5 +1,5 @@
 import React from 'react';
-import { PortalLayout } from '@/components/layout/portal/PortalLayout';
+import { PortalLayout } from '@/features/layout';
 
 export default function PortalRootLayout({
   children,

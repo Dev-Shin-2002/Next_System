@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { LoginCard } from '@/components/auth/LoginCard';
+import { LoginCard } from '@/features/auth';
 
 export const metadata = {
   title: 'Sign In | System Manager',

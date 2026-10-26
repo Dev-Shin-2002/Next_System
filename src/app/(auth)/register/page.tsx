@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { RegisterCard } from '@/components/auth/RegisterCard';
+import { RegisterCard } from '@/features/auth';
 
 export const metadata = {
   title: 'Create Account | System Manager',

@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { cookies } from 'next/headers';
 import { AdminTelemetryProvider } from '@/providers/AdminTelemetryProvider';
-import { AdminLayout } from '@/components/layout/admin/AdminLayout';
+import { AdminLayout } from '@/features/layout';
 import AdminLoading from './admin/loading';
 
 async function AdminShell({ children }: { children: React.ReactNode }) {

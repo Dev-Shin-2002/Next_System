@@ -23,7 +23,7 @@
 ### Task 1: Backend Schema & Mappers
 
 **Files:**
-- Create: `backend/src/modules/github/repo-detail.schema.ts`
+- Create: `backend/src/modules/github/repo-detail.schema.ts` 
 - Create: `backend/src/modules/github/repo-detail.mapper.ts`
 
 **Interfaces:**
@@ -40,7 +40,7 @@
   Kỳ vọng: PASS (0 errors).
 
 - [x] **Step 4: Commit**
-  ```bash
+  ```bash 
   git add backend/src/modules/github/repo-detail.schema.ts backend/src/modules/github/repo-detail.mapper.ts
   git commit -m "feat(backend): add github repo detail schema and mappers"
   ```
