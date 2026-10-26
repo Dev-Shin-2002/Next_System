@@ -29,17 +29,17 @@
 **Interfaces:**
 - Produces: `RepoDetailResponse`, `RepoDetailData`, `Repo`, `Commit`, `CiRun`, `PullRequest`, `GithubDeployment`, `LinkedDeployment`, `ListBlock<T>`, `toRepo()`, `toCommit()`, `toCiRun()`, `toPullRequest()`, `toGithubDeployment()`, `okBlock()`, `errorBlock()`, `notLinkedBlock()`, `deriveRole()`.
 
-- [ ] **Step 1: Tạo `backend/src/modules/github/repo-detail.schema.ts`**
+- [x] **Step 1: Tạo `backend/src/modules/github/repo-detail.schema.ts`**
   Định nghĩa Zod Schema hoàn chỉnh cho `Repo`, `Commit`, `CiRun`, `PullRequest`, `GithubDeployment`, `LinkedDeployment`, `ListBlock<T>` và `RepoDetailResponse`.
 
-- [ ] **Step 2: Tạo `backend/src/modules/github/repo-detail.mapper.ts`**
+- [x] **Step 2: Tạo `backend/src/modules/github/repo-detail.mapper.ts`**
   Định nghĩa raw interfaces, các hàm chuyển đổi dữ liệu (`toRepo`, `toCommit`, `toCiRun`, `toPullRequest`, `toGithubDeployment`), các hàm bọc khối (`okBlock`, `errorBlock`, `notLinkedBlock`) và hàm trích xuất rate limit từ headers.
 
-- [ ] **Step 3: Kiểm tra biên dịch TypeScript trên Backend**
+- [x] **Step 3: Kiểm tra biên dịch TypeScript trên Backend**
   Chạy lệnh: `npx tsc --noEmit` tại thư mục `backend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git add backend/src/modules/github/repo-detail.schema.ts backend/src/modules/github/repo-detail.mapper.ts
   git commit -m "feat(backend): add github repo detail schema and mappers"
@@ -57,7 +57,7 @@
 - Consumes: Mappers & Schema từ Task 1.
 - Produces: Hàm `fetchRepositoryOverview(prisma, userId, repoId, options)` và route `GET /api/v1/github/repos/:id/overview`.
 
-- [ ] **Step 1: Thêm `fetchRepositoryOverview` vào `github.service.ts`**
+- [x] **Step 1: Thêm `fetchRepositoryOverview` vào `github.service.ts`**
   - Tìm `Integration` của `userId` với provider `GITHUB` và giải mã access token.
   - Kiểm tra ETag Cache trong PostgreSQL (`IntegrationCache`) với cacheKey `repo:overview:${repoId}`.
   - Lấy repo metadata qua `GET https://api.github.com/repositories/:id`.
@@ -69,16 +69,16 @@
     5. `GET /repos/{owner}/{name}/deployments?per_page=5`
   - Ánh xạ sang cấu trúc `RepoDetailData`, cập nhật ETag vào `IntegrationCache`, trả về kết quả chuẩn envelope.
 
-- [ ] **Step 2: Đăng ký route `GET /github/repos/:id/overview` trong `github.route.ts`**
+- [x] **Step 2: Đăng ký route `GET /github/repos/:id/overview` trong `github.route.ts`**
   - Xác thực người dùng qua JWT.
   - Nhận `id` từ `request.params` (ép kiểu số nguyên) và `refresh` từ `request.query`.
   - Gọi `fetchRepositoryOverview` và trả về `reply.ok(result)`.
 
-- [ ] **Step 3: Kiểm tra biên dịch TypeScript trên Backend**
+- [x] **Step 3: Kiểm tra biên dịch TypeScript trên Backend**
   Chạy lệnh: `npx tsc --noEmit` tại thư mục `backend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git add backend/src/modules/github/github.service.ts backend/src/modules/github/github.route.ts
   git commit -m "feat(backend): implement GET /api/v1/github/repos/:id/overview"
@@ -97,10 +97,10 @@
 - Consumes: API endpoint `/api/v1/github/repos/:id/overview`.
 - Produces: `RepoDetailData`, `RepoDetailResponse`, `getGithubRepoDetail(id: number, refresh?: boolean)`.
 
-- [ ] **Step 1: Tạo `frontend/src/app/api/github/repo-detail.types.ts`**
+- [x] **Step 1: Tạo `frontend/src/app/api/github/repo-detail.types.ts`**
   Đồng bộ Types từ Schema backend sang Frontend: `Repo`, `Commit`, `CiRun`, `PullRequest`, `GithubDeployment`, `LinkedDeployment`, `ListBlock<T>`, `RepoDetailData`.
 
-- [ ] **Step 2: Thêm hàm `getGithubRepoDetail` trong `frontend/src/app/api/github/repos.ts`**
+- [x] **Step 2: Thêm hàm `getGithubRepoDetail` trong `frontend/src/app/api/github/repos.ts`**
   ```typescript
   export async function getGithubRepoDetail(
     id: number,
@@ -112,14 +112,14 @@
   }
   ```
 
-- [ ] **Step 3: Export trong `frontend/src/app/api/github/index.ts`**
+- [x] **Step 3: Export trong `frontend/src/app/api/github/index.ts`**
   Export `* from './repo-detail.types'` để toàn bộ ứng dụng dùng chung.
 
-- [ ] **Step 4: Kiểm tra TypeScript trên Frontend**
+- [x] **Step 4: Kiểm tra TypeScript trên Frontend**
   Chạy: `npx tsc --noEmit` tại `frontend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
   ```bash
   git add frontend/src/app/api/github/
   git commit -m "feat(frontend): add repo detail types and API client function"
@@ -138,7 +138,7 @@
 - Consumes: `Repo`, `ListBlock<T>`, `Typography`, `Button`, `IconRegistry`.
 - Produces: `RepoBlockState`, `RepoDetailHeader`, `RepoMetricsCards`.
 
-- [ ] **Step 1: Tạo `RepoBlockState.tsx`**
+- [x] **Step 1: Tạo `RepoBlockState.tsx`**
   Component tái sử dụng hiển thị các trạng thái khối:
   - `forbidden`: Hộp cảnh báo màu hổ phách "Không đủ quyền xem mục này trên GitHub".
   - `rate_limited`: Hộp cảnh báo hết hạn mức GitHub API.
@@ -146,24 +146,24 @@
   - `empty`: Hiển thị "Chưa có dữ liệu".
   - `loading`: Skeleton pulse.
 
-- [ ] **Step 2: Tạo `RepoDetailHeader.tsx`**
+- [x] **Step 2: Tạo `RepoDetailHeader.tsx`**
   - Hiển thị breadcrumb quay về danh sách (`← Dự án GitHub`).
   - Tên repo, badge `Role` (`owner`, `admin`, `collaborator`, `read`), badge `Private`/`Public`.
   - Tên tác giả, ngôn ngữ, branch mặc định, dung lượng.
   - Nút `Mở GitHub ↗` và nút `Làm mới (Force Refresh)`.
 
-- [ ] **Step 3: Tạo `RepoMetricsCards.tsx`**
+- [x] **Step 3: Tạo `RepoMetricsCards.tsx`**
   Hiển thị lưới 4 thẻ:
   1. CI mới nhất (Trạng thái icon pass/fail/in-progress, tên workflow run).
   2. Deploy mới nhất (Trạng thái deploy từ GitHub hoặc "Chưa liên kết").
   3. Pull Requests mở (Số lượng PR đang mở).
   4. Lần push cuối (Relative time từ `pushedAt`).
 
-- [ ] **Step 4: Kiểm tra linter và TypeScript**
+- [x] **Step 4: Kiểm tra linter và TypeScript**
   Chạy: `npm run lint` tại `frontend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
   ```bash
   git add frontend/src/features/github/detail/
   git commit -m "feat(frontend): create RepoDetailHeader, RepoMetricsCards, and RepoBlockState"
@@ -185,7 +185,7 @@
 - Consumes: `ListBlock<Commit>`, `ListBlock<CiRun>`, `ListBlock<PullRequest>`, `ListBlock<LinkedDeployment>`, `RepoBlockState`.
 - Produces: `RepoCommitsBlock`, `RepoCiRunsBlock`, `RepoOpenPullsBlock`, `RepoDeploymentBlock`.
 
-- [ ] **Step 1: Tạo `RepoCommitsBlock.tsx`**
+- [x] **Step 1: Tạo `RepoCommitsBlock.tsx`**
   - Hiển thị danh sách 10 commit gần nhất:
     - SHA 7 ký tự (cắt từ 40 ký tự) kèm link mở commit trên GitHub.
     - Message headline dòng đầu.
@@ -194,7 +194,7 @@
     - Thời gian tương đối (`authoredAt`).
   - Bọc qua `RepoBlockState` nếu status khác `ok`.
 
-- [ ] **Step 2: Tạo `RepoCiRunsBlock.tsx`**
+- [x] **Step 2: Tạo `RepoCiRunsBlock.tsx`**
   - Hiển thị danh sách GitHub Actions runs:
     - Trạng thái kết luận (icon check xanh lá nếu `success`, x đỏ nếu `failure`, spinner nếu `in_progress`).
     - Tên workflow run (`workflowName`), sự kiện kích hoạt (`event`).
@@ -202,7 +202,7 @@
     - Thời lượng thực thi và link xem log GitHub (`htmlUrl`).
   - Bọc qua `RepoBlockState` nếu status khác `ok`.
 
-- [ ] **Step 3: Tạo `RepoOpenPullsBlock.tsx`**
+- [x] **Step 3: Tạo `RepoOpenPullsBlock.tsx`**
   - Hiển thị danh sách PR đang mở:
     - Số hiệu PR `#123` và tiêu đề.
     - Tác giả PR (avatar + login).
@@ -211,18 +211,18 @@
     - Badge `Draft` nếu là PR nháp.
   - Bọc qua `RepoBlockState` nếu status khác `ok`.
 
-- [ ] **Step 4: Tạo `RepoDeploymentBlock.tsx`**
+- [x] **Step 4: Tạo `RepoDeploymentBlock.tsx`**
   - Hiển thị khối Triển khai:
     - Nếu `linkedDeployments.status === 'not_linked'`: Hiển thị hộp thông báo Dark Tech "Repo này chưa gắn với Vercel, Render hay Cloudflare" kèm nút `Liên kết triển khai` (`variant="primary"`).
     - Sẵn sàng render danh sách deployments khi có liên kết.
 
-- [ ] **Step 5: Export toàn bộ từ `frontend/src/features/github/detail/index.ts` và `frontend/src/features/github/index.ts`**
+- [x] **Step 5: Export toàn bộ từ `frontend/src/features/github/detail/index.ts` và `frontend/src/features/github/index.ts`**
 
-- [ ] **Step 6: Kiểm tra linter và TypeScript**
+- [x] **Step 6: Kiểm tra linter và TypeScript**
   Chạy: `npm run lint` tại `frontend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
   ```bash
   git add frontend/src/features/github/
   git commit -m "feat(frontend): create RepoCommitsBlock, RepoCiRunsBlock, RepoOpenPullsBlock, RepoDeploymentBlock"
@@ -240,7 +240,7 @@
 - Consumes: Tất cả components từ Task 4 & Task 5, `getGithubRepoDetail`.
 - Produces: Route `/admin/github/:id` hoàn chỉnh.
 
-- [ ] **Step 1: Tạo `frontend/src/app/(admin)/admin/github/[id]/page.tsx`**
+- [x] **Step 1: Tạo `frontend/src/app/(admin)/admin/github/[id]/page.tsx`**
   - Nhận `params.id` từ URL (async params của Next.js 15+).
   - Quản lý trạng thái: `detailData`, `isLoading`, `isRefreshing`, `error`.
   - Fetch dữ liệu qua `getGithubRepoDetail(repoId, false)` trong `useEffect` (tuân thủ quy tắc không gọi setState đồng bộ để tránh cascading renders).
@@ -254,15 +254,15 @@
     - `RepoDeploymentBlock`
   - Xử lý skeleton pulse loading khi `isLoading === true`.
 
-- [ ] **Step 2: Cập nhật `GithubRepoCard.tsx`**
+- [x] **Step 2: Cập nhật `GithubRepoCard.tsx`**
   - Thêm liên kết nội bộ `Link href={`/admin/github/${repo.id}`}` vào tiêu đề repository và thẻ để người dùng có thể nhấp vào xem trang chi tiết.
   - Vẫn giữ nút `↗` mở tab mới trực tiếp sang trang web GitHub.
 
-- [ ] **Step 3: Kiểm tra linter và TypeScript**
+- [x] **Step 3: Kiểm tra linter và TypeScript**
   Chạy: `npm run lint` và `npx tsc --noEmit` tại `frontend/`.
   Kỳ vọng: PASS (0 errors, 0 warnings).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
   ```bash
   git add frontend/src/app/\(admin\)/admin/github/\[id\]/ frontend/src/features/github/GithubRepoCard.tsx
   git commit -m "feat(frontend): assemble repo detail page at /admin/github/[id] and wire card links"
@@ -274,19 +274,19 @@
 
 **Files:** Toàn bộ dự án Backend & Frontend
 
-- [ ] **Step 1: Chạy kiểm tra TypeScript Backend**
+- [x] **Step 1: Chạy kiểm tra TypeScript Backend**
   Chạy: `npx tsc --noEmit` tại `backend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 2: Chạy kiểm tra TypeScript Frontend**
+- [x] **Step 2: Chạy kiểm tra TypeScript Frontend**
   Chạy: `npx tsc --noEmit` tại `frontend/`.
   Kỳ vọng: PASS (0 errors).
 
-- [ ] **Step 3: Chạy linter Frontend**
+- [x] **Step 3: Chạy linter Frontend**
   Chạy: `npm run lint` tại `frontend/`.
   Kỳ vọng: PASS (0 errors, 0 warnings).
 
-- [ ] **Step 4: Commit hoàn tất tính năng**
+- [x] **Step 4: Commit hoàn tất tính năng**
   ```bash
   git commit --allow-empty -m "chore: verify and complete github repo detail implementation"
   ```
