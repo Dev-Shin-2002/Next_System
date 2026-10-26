@@ -8,9 +8,9 @@ import type { Repo } from '@/app/api/github/repo-detail.types';
 
 export interface RepoDetailHeaderProps {
   repo: Repo;
-  isCached: boolean;
-  isLoading: boolean;
-  isRefreshing: boolean;
+  isCached?: boolean;
+  isLoading?: boolean;
+  isRefreshing?: boolean;
   onRefresh: () => void;
 }
 

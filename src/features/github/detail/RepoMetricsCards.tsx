@@ -7,14 +7,16 @@ import type {
   ListBlock,
   PullRequest,
   Repo,
+  RepoDetailData,
 } from '@/app/api/github/repo-detail.types';
 
 export interface RepoMetricsCardsProps {
-  repo: Repo;
-  ciRuns: ListBlock<CiRun>;
-  openPulls: ListBlock<PullRequest>;
-  githubDeployments: ListBlock<GithubDeployment>;
-  linkedDeployments: ListBlock<LinkedDeployment>;
+  data?: RepoDetailData;
+  repo?: Repo;
+  ciRuns?: ListBlock<CiRun>;
+  openPulls?: ListBlock<PullRequest>;
+  githubDeployments?: ListBlock<GithubDeployment>;
+  linkedDeployments?: ListBlock<LinkedDeployment>;
 }
 
 function timeAgo(dateString: string | null): string {
@@ -36,13 +38,13 @@ function timeAgo(dateString: string | null): string {
   return 'Vừa xong';
 }
 
-export const RepoMetricsCards: React.FC<RepoMetricsCardsProps> = ({
-  repo,
-  ciRuns,
-  openPulls,
-  githubDeployments,
-  linkedDeployments,
-}) => {
+export const RepoMetricsCards: React.FC<RepoMetricsCardsProps> = (props) => {
+  const repo = props.data ? props.data.repo : props.repo!;
+  const ciRuns = props.data ? props.data.ciRuns : props.ciRuns!;
+  const openPulls = props.data ? props.data.openPulls : props.openPulls!;
+  const githubDeployments = props.data ? props.data.githubDeployments : props.githubDeployments!;
+  const linkedDeployments = props.data ? props.data.linkedDeployments : props.linkedDeployments!;
+
   // 1. CI Status
   const latestRun = ciRuns.items[0];
   let ciStatusText = 'Chưa cấu hình';
