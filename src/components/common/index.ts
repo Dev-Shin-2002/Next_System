@@ -6,3 +6,4 @@ export * from './Checkbox';
 export * from './Logo';
 export * from './IconRegistry';
 export * from './LanguageSwitcher';
+export * from './Select';

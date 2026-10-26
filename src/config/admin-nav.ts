@@ -16,6 +16,7 @@ export const ADMIN_NAV_GROUPS = [
 
 export const ADMIN_NAV_ITEMS: NavItem[] = [
   { id: 'dashboard', labelKey: 'nav.dashboard', href: '/admin', icon: 'dashboard', exact: true, groupKey: 'nav.groups.monitoring' },
+  { id: 'github', labelKey: 'nav.github', href: '/admin/github', icon: 'github', groupKey: 'nav.groups.system' },
   { id: 'services', labelKey: 'nav.services', href: '/admin/services', icon: 'services', groupKey: 'nav.groups.monitoring' },
   { id: 'tasks', labelKey: 'nav.tasks', href: '/admin/tasks', icon: 'tasks', groupKey: 'nav.groups.monitoring', badgeKey: 'activeTasks' },
   { id: 'logs', labelKey: 'nav.logs', href: '/admin/logs', icon: 'logs', groupKey: 'nav.groups.observability' },

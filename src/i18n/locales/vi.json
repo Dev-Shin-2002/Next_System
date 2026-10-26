@@ -27,6 +27,7 @@
     "logs": "Nhật ký Logs",
     "metrics": "Hiệu năng Metrics",
     "alerts": "Cảnh báo",
+    "github": "Dự án GitHub",
     "settings": "Cài đặt",
     "groups": {
       "monitoring": "Giám sát",

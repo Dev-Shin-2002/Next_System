@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/i18n';
@@ -26,7 +26,13 @@ export function AdminSidebar({
   const pathname = usePathname();
   const telemetry = useAdminTelemetry();
 
-  // Auto-close mobile drawer on route change
+  // Floating tooltip state on collapsed desktop
+  const [tooltip, setTooltip] = useState<{
+    text: string;
+    top: number;
+    badge?: string | number;
+  } | null>(null);
+
   useEffect(() => {
     onCloseMobile();
   }, [pathname, onCloseMobile]);
@@ -56,7 +62,7 @@ export function AdminSidebar({
             const formattedBadge = badgeCount && badgeCount > 99 ? '99+' : badgeCount;
 
             return (
-              <div key={item.id} className="relative group">
+              <div key={item.id} className="relative">
                 <Link
                   href={item.href}
                   className={`flex items-center gap-3 px-3 py-2 text-xs font-mono transition-colors border-l-2 ${isActive
@@ -65,6 +71,17 @@ export function AdminSidebar({
                     } ${isCollapsed ? 'justify-center' : ''}`}
                   aria-current={isActive ? 'page' : undefined}
                   aria-label={t(item.labelKey)}
+                  onClick={() => setTooltip(null)}
+                  onMouseEnter={(e) => {
+                    if (!isCollapsed) return;
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setTooltip({
+                      text: t(item.labelKey),
+                      top: rect.top + rect.height / 2,
+                      badge: formattedBadge,
+                    });
+                  }}
+                  onMouseLeave={() => setTooltip(null)}
                 >
                   <IconRegistry
                     name={item.icon}
@@ -82,18 +99,6 @@ export function AdminSidebar({
                     </span>
                   ) : null}
                 </Link>
-
-                {/* Floating tooltip on collapsed desktop */}
-                {isCollapsed && (
-                  <div className="hidden md:group-hover:flex absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1 bg-[#1f1f1f] border border-[var(--border)] text-white text-xs font-mono whitespace-nowrap z-50 pointer-events-none shadow-lg">
-                    <span>{t(item.labelKey)}</span>
-                    {formattedBadge ? (
-                      <span className="ml-1.5 px-1 py-0.2 bg-[#000000] text-[#52a8ff] text-[10px]">
-                        {formattedBadge}
-                      </span>
-                    ) : null}
-                  </div>
-                )}
               </div>
             );
           })}
@@ -124,8 +129,11 @@ export function AdminSidebar({
         </button>
       </div>
 
-      {/* Navigation Groups */}
-      <nav className="flex-1 overflow-y-auto p-3 space-y-4">
+      {/* Navigation Groups - overflow-x-hidden ensures no horizontal scroll bar */}
+      <nav
+        className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-4"
+        onScroll={() => setTooltip(null)}
+      >
         {ADMIN_NAV_GROUPS.map((group) => renderNavGroup(group.key))}
       </nav>
 
@@ -162,6 +170,23 @@ export function AdminSidebar({
       >
         {sidebarContent}
       </aside>
+
+      {/* Floating tooltip on collapsed desktop - rendered outside scroll container */}
+      {isCollapsed && tooltip && (
+        <div
+          className="hidden md:flex fixed left-[72px] -translate-y-1/2 px-2.5 py-1.5 bg-[#141414] border border-white/20 text-white text-xs font-mono whitespace-nowrap z-[100] pointer-events-none shadow-2xl items-center gap-1.5"
+          style={{ top: `${tooltip.top}px` }}
+        >
+          {/* Arrow pointing left to the sidebar icon */}
+          <span className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#141414] border-l border-b border-white/20 rotate-45" />
+          <span className="relative z-10 font-medium tracking-wide">{tooltip.text}</span>
+          {tooltip.badge ? (
+            <span className="relative z-10 ml-0.5 px-1 py-0.2 bg-black text-[#52a8ff] text-[10px] font-bold border border-white/10">
+              {tooltip.badge}
+            </span>
+          ) : null}
+        </div>
+      )}
 
       {/* Mobile Backdrop Scrim */}
       {isMobileOpen && (

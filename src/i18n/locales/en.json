@@ -27,6 +27,7 @@
     "logs": "System Logs",
     "metrics": "Performance Metrics",
     "alerts": "Alerts",
+    "github": "GitHub Repositories",
     "settings": "Settings",
     "groups": {
       "monitoring": "Monitoring",
