@@ -13,6 +13,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     leftIcon?: React.ReactNode;
     rightIcon?: React.ReactNode;
     href?: string;
+    target?: string;
+    rel?: string;
     children?: React.ReactNode;
 }
 
@@ -66,6 +68,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         leftIcon,
         rightIcon,
         href,
+        target,
+        rel,
         disabled,
         className,
         style,
@@ -102,6 +106,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         return (
             <Link
                 href={href}
+                target={target}
+                rel={rel}
                 className={classes}
                 style={combinedStyle}
                 data-disabled={isDisabled ? 'true' : undefined}
