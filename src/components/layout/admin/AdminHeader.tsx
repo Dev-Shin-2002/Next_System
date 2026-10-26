@@ -34,7 +34,7 @@ export function AdminHeader({ onToggleMobile, isMobileOpen }: AdminHeaderProps) 
   const avatar = user?.avatarUrl || user?.identities?.[0]?.avatarUrl;
   const displayName = user?.displayName || user?.identities?.[0]?.loginName || 'GitHub User';
   const email = user?.primaryEmail || user?.identities?.[0]?.email;
-  const role = user?.role || 'MEMBER';
+  const role = user?.role || 'MEMBER_';
 
   return (
     <header
