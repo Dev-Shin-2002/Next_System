@@ -5,3 +5,4 @@ export * from './RepoCommitsBlock';
 export * from './RepoCiRunsBlock';
 export * from './RepoOpenPullsBlock';
 export * from './RepoDeploymentBlock';
+export * from './DeploySetupModal';
