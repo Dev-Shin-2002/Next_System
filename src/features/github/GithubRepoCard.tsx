@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Typography } from '@/components/common/Typography';
 import type { GithubRepo } from '@/app/api/github/repos';
 
@@ -47,12 +50,32 @@ function formatDate(isoString: string): string {
 }
 
 export const GithubRepoCard: React.FC<GithubRepoCardProps> = ({ repo }) => {
+  const router = useRouter();
   const langColor = repo.language
     ? LANGUAGE_COLORS[repo.language] || '#999999'
     : undefined;
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If clicked on an external link or button, do not navigate to detail
+    const target = e.target as HTMLElement;
+    if (target.closest('a[target="_blank"]')) {
+      return;
+    }
+    router.push(`/admin/github/${repo.id}`);
+  };
+
   return (
-    <div className="p-5 bg-[#0a0a0a] border border-[var(--border)] hover:border-[#52a8ff]/40 transition-all flex flex-col justify-between group">
+    <div
+      onClick={handleCardClick}
+      className="p-5 bg-[#0a0a0a] border border-[var(--border)] hover:border-[#52a8ff]/60 hover:bg-[#0d0d0d] transition-all flex flex-col justify-between group cursor-pointer relative"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          router.push(`/admin/github/${repo.id}`);
+        }
+      }}
+    >
       <div className="space-y-3">
         {/* Top Owner / Visibility Row */}
         <div className="flex items-start justify-between gap-2">
@@ -92,7 +115,8 @@ export const GithubRepoCard: React.FC<GithubRepoCardProps> = ({ repo }) => {
         <div className="flex items-center justify-between gap-2">
           <Link
             href={`/admin/github/${repo.id}`}
-            className="text-base font-semibold text-white hover:text-[#52a8ff] transition-colors inline-flex items-center gap-1.5 break-all"
+            onClick={(e) => e.stopPropagation()}
+            className="text-base font-semibold text-white group-hover:text-[#52a8ff] transition-colors inline-flex items-center gap-1.5 break-all"
           >
             <span>{repo.name}</span>
           </Link>
@@ -101,8 +125,8 @@ export const GithubRepoCard: React.FC<GithubRepoCardProps> = ({ repo }) => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            title="Mở trên GitHub"
-            className="text-xs text-neutral-500 hover:text-white transition-colors shrink-0 p-1"
+            title="Mở trực tiếp trên GitHub"
+            className="text-xs text-neutral-500 hover:text-white transition-colors shrink-0 p-1 hover:bg-neutral-800 border border-transparent hover:border-neutral-700"
           >
             ↗
           </a>
@@ -160,26 +184,13 @@ export const GithubRepoCard: React.FC<GithubRepoCardProps> = ({ repo }) => {
           <span>Cập nhật: {formatDate(repo.updatedAt)}</span>
         </div>
 
-        {/* Permissions pills if present */}
-        {repo.permissions && (
-          <div className="pt-1 flex items-center gap-1 text-[9px] font-mono text-[#666666]">
-            {repo.permissions.admin && (
-              <span className="px-1 bg-white/5 border border-white/10 text-white">
-                Admin
-              </span>
-            )}
-            {repo.permissions.push && (
-              <span className="px-1 bg-white/5 border border-white/10 text-white">
-                Push
-              </span>
-            )}
-            {repo.permissions.pull && (
-              <span className="px-1 bg-white/5 border border-white/10 text-white">
-                Pull
-              </span>
-            )}
-          </div>
-        )}
+        {/* Action Link Footer */}
+        <div className="pt-2 flex items-center justify-between border-t border-neutral-900 text-xs font-mono">
+          <span className="text-[10px] text-neutral-500">ID: {repo.id}</span>
+          <span className="text-[#52a8ff] group-hover:translate-x-0.5 transition-transform font-medium inline-flex items-center gap-1">
+            Chi tiết <span>→</span>
+          </span>
+        </div>
       </div>
     </div>
   );
