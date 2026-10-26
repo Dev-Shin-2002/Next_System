@@ -1,19 +1,45 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/i18n';
 import { Logo } from '@/components/common/Logo';
 import { Typography } from '@/components/common/Typography';
 import { EmailForm } from './EmailForm';
 import { OAuthButtons } from './OAuthButtons';
+import { githubLogin } from '@/app/api/github';
 
 export function LoginCard() {
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get('error');
+
+  const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(null);
+
+  const handleGithubLogin = async () => {
+    setIsGithubLoading(true);
+    setOauthError(null);
+    try {
+      await githubLogin();
+    } catch (err: unknown) {
+      console.error('GitHub login error:', err);
+      setIsGithubLoading(false);
+      setOauthError(
+        err instanceof Error
+          ? err.message
+          : 'Không thể kết nối đến máy chủ xác thực. Vui lòng thử lại.'
+      );
+    }
+  };
 
   const handleOAuth = (provider: string) => {
+    if (provider === 'github') {
+      handleGithubLogin();
+      return;
+    }
     document.cookie = `sm_session=auth_token_${provider}; path=/; max-age=86400; SameSite=Lax`;
     router.push('/admin');
     router.refresh();
@@ -38,6 +64,22 @@ export function LoginCard() {
         </div>
       </div>
 
+      {/* OAuth Error Alert Banner */}
+      {(oauthError || errorParam) && (
+        <div
+          role="alert"
+          className="p-3 bg-red-950/40 border border-red-500/40 text-red-300 text-xs font-sans flex items-start gap-2.5"
+        >
+          <span className="text-red-400 font-bold">⚠</span>
+          <div className="flex-1">
+            <span className="font-semibold block">{t('auth.authFailed')}</span>
+            <span className="text-red-400/80 text-[11px] break-words">
+              {oauthError || errorParam}
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Main Email Form */}
       <EmailForm />
 
@@ -55,6 +97,7 @@ export function LoginCard() {
       <OAuthButtons
         onGithubClick={() => handleOAuth('github')}
         onGoogleClick={() => handleOAuth('google')}
+        isGithubLoading={isGithubLoading}
       />
 
       {/* Footer: Register prompt */}

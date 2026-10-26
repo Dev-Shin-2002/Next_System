@@ -3,12 +3,13 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
+
   if (pathname.startsWith('/admin')) {
     // Structural placeholder check (NOT cryptographic authentication).
     // In production, real auth must verify token signature/expiry, and
     // Server Actions/route handlers under /admin must independently re-validate credentials.
-    const sessionToken = request.cookies.get('sm_session')?.value;
+    const sessionToken =
+      request.cookies.get('sm_session')?.value || request.cookies.get('token')?.value;
     const authRequired = process.env.AUTH_REQUIRED === 'true';
 
     if (authRequired && !sessionToken) {

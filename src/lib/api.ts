@@ -66,12 +66,59 @@ let isRefreshing = false;
 let refreshSubscribers: Array<(token: string | null) => void> = [];
 
 export const tokenStorage = {
-  get: () => inMemoryAccessToken,
+  get: (): string | null => {
+    if (inMemoryAccessToken) return inMemoryAccessToken;
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('sm_access_token');
+        if (stored) {
+          inMemoryAccessToken = stored;
+          return stored;
+        }
+
+        // Đọc từ cookie sm_session hoặc token
+        const match = document.cookie.match(/(?:^|;\s*)(?:sm_session|token)=([^;]+)/);
+        if (match && match[1]) {
+          const cookieVal = decodeURIComponent(match[1]);
+          if (cookieVal && cookieVal.startsWith('eyJ')) {
+            inMemoryAccessToken = cookieVal;
+            try {
+              localStorage.setItem('sm_access_token', cookieVal);
+            } catch {
+              // Bỏ qua lỗi storage
+            }
+            return cookieVal;
+          }
+        }
+      } catch {
+        // LocalStorage có thể bị hạn chế trong iframe hoặc private mode
+      }
+    }
+    return null;
+  },
   set: (token: string | null) => {
     inMemoryAccessToken = token;
+    if (typeof window !== 'undefined') {
+      try {
+        if (token) {
+          localStorage.setItem('sm_access_token', token);
+        } else {
+          localStorage.removeItem('sm_access_token');
+        }
+      } catch {
+        // Bỏ qua lỗi truy cập storage
+      }
+    }
   },
   clear: () => {
     inMemoryAccessToken = null;
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('sm_access_token');
+      } catch {
+        // Bỏ qua lỗi
+      }
+    }
   },
 };
 
@@ -95,8 +142,18 @@ export interface RequestOptions extends RequestInit {
   returnEnvelope?: boolean;
 }
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8387';
+export function getApiBaseUrl(): string {
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (host === '127.0.0.1') {
+      return 'http://127.0.0.1:8387';
+    }
+    if (host === 'localhost') {
+      return 'http://localhost:8387';
+    }
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8387';
+}
 
 async function request<T>(
   endpoint: string,
@@ -110,7 +167,8 @@ async function request<T>(
     ...customConfig
   } = options;
 
-  let url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+  const baseUrl = getApiBaseUrl();
+  let url = endpoint.startsWith('http') ? endpoint : `${baseUrl}${endpoint}`;
 
   if (params) {
     const searchParams = new URLSearchParams();
@@ -180,7 +238,7 @@ async function request<T>(
       isRefreshing = true;
 
       try {
-        const refreshRes = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
+        const refreshRes = await fetch(`${baseUrl}/api/v1/auth/refresh`, {
           method: 'POST',
           credentials: 'include',
         });

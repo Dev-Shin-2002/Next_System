@@ -1,11 +1,14 @@
 'use client';
 
-import React from 'react';
-import { useTranslation } from '@/i18n';
-import { IconRegistry } from '@/components/common/IconRegistry';
-import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  Button,
+  Typography,
+  IconRegistry,
+  LanguageSwitcher,
+} from '@/components/common';
 import { AdminBreadcrumb } from './AdminBreadcrumb';
-import { useAdminTelemetry } from '@/providers/AdminTelemetryProvider';
+import { useGithubAuth } from '@/app/api/github';
 
 export interface AdminHeaderProps {
   onToggleMobile: () => void;
@@ -13,97 +16,125 @@ export interface AdminHeaderProps {
 }
 
 export function AdminHeader({ onToggleMobile, isMobileOpen }: AdminHeaderProps) {
-  const { t } = useTranslation();
-  const telemetry = useAdminTelemetry();
+  const { user, logout } = useGithubAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const getStatusDisplay = () => {
-    switch (telemetry.status) {
-      case 'pass':
-        return {
-          dotClass: 'bg-[var(--color-status-pass)]',
-          label: 'PASS: HEALTHY',
-          icon: null,
-        };
-      case 'warn':
-        return {
-          dotClass: 'bg-[var(--color-status-warn)]',
-          label: 'WARN: DEGRADED',
-          icon: 'alert-triangle',
-        };
-      case 'fail':
-        return {
-          dotClass: 'bg-[var(--color-status-fail)]',
-          label: 'FAIL: DOWN',
-          icon: 'alert-triangle',
-        };
-      case 'offline':
-        return {
-          dotClass: 'bg-[var(--color-status-offline)]',
-          label: 'OFFLINE: UNREACHABLE',
-          icon: null,
-        };
-      case 'loading':
-      default:
-        return {
-          dotClass: 'bg-[var(--color-status-loading)] animate-pulse',
-          label: 'CONNECTING...',
-          icon: null,
-        };
-    }
-  };
+  // Đóng menu khi nhấp chuột ra ngoài
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  const statusConfig = getStatusDisplay();
+  const avatar = user?.avatarUrl || user?.identities?.[0]?.avatarUrl;
+  const displayName = user?.displayName || user?.identities?.[0]?.loginName || 'GitHub User';
+  const email = user?.primaryEmail || user?.identities?.[0]?.email;
+  const role = user?.role || 'MEMBER';
 
   return (
     <header
       id="admin-header"
-      className="sticky top-0 z-10 h-14 border-b border-[var(--border)] bg-[#000000]/80 backdrop-blur-md px-6 flex items-center justify-between"
+      className="sticky top-0 z-30 h-14 border-b border-[var(--border)] bg-[#000000]/90 backdrop-blur-md px-6 flex items-center justify-between"
     >
       {/* Left: Mobile hamburger & Dynamic Breadcrumb */}
       <div className="flex items-center gap-3">
-        {/* Mobile Hamburger Button */}
-        <button
-          type="button"
+        {/* Mobile Hamburger Button using Common Button */}
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={onToggleMobile}
-          className="md:hidden p-1.5 text-[#999999] hover:text-white focus:outline-none focus:ring-1 focus:ring-[var(--color-primary)]"
+          className="md:hidden !p-1.5 !h-8 text-[#999999] hover:text-white"
           aria-label="Toggle Navigation"
           aria-expanded={isMobileOpen}
         >
           <IconRegistry name={isMobileOpen ? 'close' : 'menu'} size={18} />
-        </button>
+        </Button>
 
         {/* Dynamic Breadcrumbs */}
         <AdminBreadcrumb />
       </div>
 
-      {/* Right: Telemetry status chip, LanguageSwitcher, CTA */}
+      {/* Right: LanguageSwitcher & Round User Avatar */}
       <div className="flex items-center gap-3 sm:gap-4">
-        {/* Real-time Status Chip */}
-        <div
-          className="v-chip !px-2.5 !py-1 text-[11px]"
-          role="status"
-          aria-live="polite"
-        >
-          <span className={`v-chip-dot ${statusConfig.dotClass}`} />
-          {statusConfig.icon && (
-            <IconRegistry name={statusConfig.icon} size={11} className="text-[#999999]" />
-          )}
-          <span>{statusConfig.label}</span>
-        </div>
-
-        {/* Language Switcher */}
+        {/* Language Switcher from Common */}
         <LanguageSwitcher />
 
-        {/* Action Button: 0px square brutalist CTA */}
-        <button
-          type="button"
-          onClick={() => telemetry.refresh()}
-          className="btn-square text-xs px-3 py-1.5 hidden sm:inline-flex gap-1.5"
-          title="Trigger instant telemetry sync"
-        >
-          <span>{t('common.refresh')}</span>
-          <span className="text-[10px]">⟳</span>
-        </button>
+        {/* Round Avatar Icon with User Profile Dropdown */}
+        <div className="relative" ref={menuRef}>
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="flex items-center justify-center rounded-full p-0.5 border border-white/20 hover:border-[#52a8ff] transition-all focus:outline-none focus:ring-2 focus:ring-[#52a8ff]/40"
+            title={displayName}
+            aria-expanded={isMenuOpen}
+            aria-haspopup="true"
+          >
+            {avatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={avatar}
+                alt={displayName}
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-[#111111] border border-white/10 flex items-center justify-center text-xs font-mono text-[#52a8ff]">
+                {user?.displayName ? (
+                  displayName.slice(0, 2).toUpperCase()
+                ) : (
+                  <IconRegistry name="github" size={16} />
+                )}
+              </div>
+            )}
+          </button>
+
+          {/* User Profile & Logout Dropdown */}
+          {isMenuOpen && (
+            <div className="absolute right-0 top-full mt-2 w-64 bg-[#0a0a0a] border border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.95)] z-50 p-2.5 space-y-2.5 font-sans text-xs backdrop-blur-xl">
+              <div className="px-2.5 py-2 border-b border-white/10 flex items-center gap-2.5">
+                {avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={avatar}
+                    alt={displayName}
+                    className="w-9 h-9 rounded-full object-cover border border-white/20 shrink-0"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-[#111111] border border-white/10 flex items-center justify-center text-xs font-mono text-[#52a8ff] shrink-0">
+                    {displayName.slice(0, 2).toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <Typography variant="body-sm" color="primary" weight={600} className="truncate block">
+                    {displayName}
+                  </Typography>
+                  {email && (
+                    <Typography variant="caption" color="muted" className="truncate block text-[11px]">
+                      {email}
+                    </Typography>
+                  )}
+                  <span className="mt-1 inline-block text-[10px] font-mono px-1.5 py-0.5 bg-[#52a8ff]/10 text-[#52a8ff] border border-[#52a8ff]/20">
+                    {role}
+                  </span>
+                </div>
+              </div>
+
+              {/* Logout Button using Common Button */}
+              <Button
+                variant="danger"
+                size="sm"
+                fullWidth
+                onClick={() => logout()}
+              >
+                Đăng xuất
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

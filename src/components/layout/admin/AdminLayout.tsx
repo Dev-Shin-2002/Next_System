@@ -80,7 +80,7 @@ export function AdminLayout({ initialCollapsed = false, children }: AdminLayoutP
       {/* Main Viewport Container */}
       <div className="flex-1 flex flex-col ml-0 md:ml-[var(--sidebar-current-width)] transition-[margin] duration-200 ease-in-out min-w-0">
         {/* Sticky Header with React 19 inert support when mobile drawer is open */}
-        <div inert={isMobileOpen}>
+        <div className="relative z-30" inert={isMobileOpen}>
           <AdminHeader
             onToggleMobile={handleToggleMobile}
             isMobileOpen={isMobileOpen}

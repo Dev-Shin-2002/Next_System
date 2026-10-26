@@ -9,9 +9,15 @@ interface OAuthButtonsProps {
   onGithubClick?: () => void;
   onGoogleClick?: () => void;
   isLoading?: boolean;
+  isGithubLoading?: boolean;
 }
 
-export function OAuthButtons({ onGithubClick, onGoogleClick, isLoading }: OAuthButtonsProps) {
+export function OAuthButtons({
+  onGithubClick,
+  onGoogleClick,
+  isLoading,
+  isGithubLoading,
+}: OAuthButtonsProps) {
   const { t } = useTranslation();
 
   return (
@@ -20,17 +26,20 @@ export function OAuthButtons({ onGithubClick, onGoogleClick, isLoading }: OAuthB
         variant="secondary"
         fullWidth
         onClick={onGithubClick}
-        disabled={isLoading}
-        leftIcon={<IconRegistry name="github" size={16} />}
+        disabled={isLoading || isGithubLoading}
+        isLoading={isGithubLoading}
+        leftIcon={!isGithubLoading ? <IconRegistry name="github" size={16} /> : undefined}
       >
-        {t('auth.oauthGithub')}
+        {isGithubLoading
+          ? t('auth.connectingGithub') || 'Đang kết nối GitHub...'
+          : t('auth.oauthGithub')}
       </Button>
 
       <Button
         variant="secondary"
         fullWidth
         onClick={onGoogleClick}
-        disabled={isLoading}
+        disabled={isLoading || isGithubLoading}
         leftIcon={<IconRegistry name="google" size={16} />}
       >
         {t('auth.oauthGoogle')}
