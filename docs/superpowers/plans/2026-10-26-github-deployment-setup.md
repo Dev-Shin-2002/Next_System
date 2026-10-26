@@ -26,7 +26,7 @@
 **Interfaces:**
 - Produces: Model `ProjectDeploymentLink` kết nối với `User`.
 
-- [ ] **Step 1: Thêm model `ProjectDeploymentLink` vào `backend/prisma/schema.prisma`**
+- [x] **Step 1: Thêm model `ProjectDeploymentLink` vào `backend/prisma/schema.prisma`**
 
 ```prisma
 model ProjectDeploymentLink {
@@ -54,14 +54,14 @@ model ProjectDeploymentLink {
 
 Và thêm quan hệ `deploymentLinks ProjectDeploymentLink[]` vào model `User`.
 
-- [ ] **Step 2: Chạy Prisma migrate / db push và generate client**
+- [x] **Step 2: Chạy Prisma migrate / db push và generate client**
 
 Run: `npx prisma db push` trong `backend/`.
 Expected: `Your database is now in sync with your Prisma schema.`
 Run: `npx prisma generate` trong `backend/`.
 Expected: `✔ Generated Prisma Client`
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add backend/prisma/schema.prisma
@@ -80,28 +80,28 @@ git commit -m "feat(backend): add ProjectDeploymentLink model to prisma schema"
 **Interfaces:**
 - Produces: Hàm `setupRepositoryDeployment(prisma, userId, repoId, payload)` và route `POST /api/v1/github/repos/:id/deployments/setup`.
 
-- [ ] **Step 1: Tạo `backend/src/modules/github/deployment-setup.service.ts`**
+- [x] **Step 1: Tạo `backend/src/modules/github/deployment-setup.service.ts`**
   - Hỗ trợ tạo URL 1-Click Launch cho Vercel, Render, Cloudflare.
   - Hỗ trợ gọi API Vercel (`POST /v11/projects`), Render (`POST /v1/services`), Cloudflare (`POST /accounts/:id/pages/projects`).
   - Hỗ trợ tạo commit file CI/CD workflow lên repo GitHub qua GitHub API `PUT /repos/:owner/:repo/contents/:path`.
   - Hỗ trợ lưu token mã hóa qua `encryptCredential()` nếu `saveToken: true`.
   - Tạo bản ghi trong `prisma.projectDeploymentLink`.
 
-- [ ] **Step 2: Cập nhật `fetchRepositoryOverview` trong `github.service.ts`**
+- [x] **Step 2: Cập nhật `fetchRepositoryOverview` trong `github.service.ts`**
   - Truy vấn `prisma.projectDeploymentLink.findMany({ where: { githubRepoId: repoId } })` và map vào `linkedDeployments`.
   - Nếu có bản ghi, trả về `status: 'ok'`, nếu chưa có trả về `status: 'not_linked'`.
 
-- [ ] **Step 3: Đăng ký route `POST /github/repos/:id/deployments/setup` trong `github.route.ts`**
+- [x] **Step 3: Đăng ký route `POST /github/repos/:id/deployments/setup` trong `github.route.ts`**
   - Xác thực JWT.
   - Validate tham số `id` và body request.
   - Gọi `setupRepositoryDeployment` và trả về `reply.ok(result)`.
 
-- [ ] **Step 4: Kiểm tra TypeScript trên Backend**
+- [x] **Step 4: Kiểm tra TypeScript trên Backend**
 
 Run: `npx tsc --noEmit` tại `backend/`.
 Expected: PASS (0 errors).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add backend/src/modules/github/
@@ -119,7 +119,7 @@ git commit -m "feat(backend): implement deployment setup service and API endpoin
 **Interfaces:**
 - Produces: `SetupDeploymentRequest`, `SetupDeploymentResponse`, `setupGithubRepoDeployment(repoId, payload)`.
 
-- [ ] **Step 1: Thêm types trong `frontend/src/app/api/github/repo-detail.types.ts`**
+- [x] **Step 1: Thêm types trong `frontend/src/app/api/github/repo-detail.types.ts`**
 
 ```typescript
 export interface SetupDeploymentRequest {
@@ -141,7 +141,7 @@ export interface SetupDeploymentResponse {
 }
 ```
 
-- [ ] **Step 2: Thêm hàm `setupGithubRepoDeployment` trong `frontend/src/app/api/github/repos.ts`**
+- [x] **Step 2: Thêm hàm `setupGithubRepoDeployment` trong `frontend/src/app/api/github/repos.ts`**
 
 ```typescript
 export async function setupGithubRepoDeployment(
@@ -155,12 +155,12 @@ export async function setupGithubRepoDeployment(
 }
 ```
 
-- [ ] **Step 3: Kiểm tra TypeScript trên Frontend**
+- [x] **Step 3: Kiểm tra TypeScript trên Frontend**
 
 Run: `npx tsc --noEmit` tại `frontend/`.
 Expected: PASS (0 errors).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add frontend/src/app/api/github/
@@ -178,7 +178,7 @@ git commit -m "feat(frontend): add setup deployment request types and API client
 **Interfaces:**
 - Produces: Component `DeploySetupModal` (props: `isOpen`, `onClose`, `repo`, `onSuccess`).
 
-- [ ] **Step 1: Tạo `DeploySetupModal.tsx`**
+- [x] **Step 1: Tạo `DeploySetupModal.tsx`**
   - Modal Dark Tech, backdrop blur, phím tắt `Esc` để đóng.
   - Chọn Provider: **Vercel** (logo tam giác), **Render** (logo R), **Cloudflare** (logo đám mây vàng).
   - Hai tab chế độ:
@@ -186,14 +186,14 @@ git commit -m "feat(frontend): add setup deployment request types and API client
     - **Tự động qua API**: Form nhập API token, Account ID (Cloudflare), checkbox lưu token, checkbox tạo CI/CD workflow, nút `[Tạo và Triển khai]`.
   - Hiển thị spinner và trạng thái phản hồi rõ ràng khi đang thực hiện.
 
-- [ ] **Step 2: Export trong `frontend/src/features/github/detail/index.ts`**
+- [x] **Step 2: Export trong `frontend/src/features/github/detail/index.ts`**
 
-- [ ] **Step 3: Kiểm tra TypeScript & Lint**
+- [x] **Step 3: Kiểm tra TypeScript & Lint**
 
 Run: `npx tsc --noEmit` và `npm run lint` tại `frontend/`.
 Expected: PASS (0 errors, 0 warnings).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add frontend/src/features/github/detail/
@@ -212,20 +212,20 @@ git commit -m "feat(frontend): create DeploySetupModal component for multi-platf
 - Consumes: `DeploySetupModal`, `setupGithubRepoDeployment`.
 - Produces: Luồng tương tác hoàn chỉnh khi bấm `Liên kết triển khai`.
 
-- [ ] **Step 1: Nâng cấp `RepoDeploymentBlock.tsx`**
+- [x] **Step 1: Nâng cấp `RepoDeploymentBlock.tsx`**
   - Nhận prop `repo: Repo` và callback `onRefresh?: () => void`.
   - Bấm `[+ Liên kết triển khai]` hoặc `[Liên kết triển khai ngay]` sẽ mở `DeploySetupModal`.
   - Khi hoàn thành thiết lập thành công, tự động gọi `onRefresh()` để cập nhật danh sách deployments ngay lập tức.
 
-- [ ] **Step 2: Cập nhật `page.tsx`**
+- [x] **Step 2: Cập nhật `page.tsx`**
   - Truyền `repo={data.repo}` và `onRefresh={() => fetchOverview(true)}` vào `RepoDeploymentBlock`.
 
-- [ ] **Step 3: Kiểm tra TypeScript & Lint**
+- [x] **Step 3: Kiểm tra TypeScript & Lint**
 
 Run: `npx tsc --noEmit` và `npm run lint` tại `frontend/`.
 Expected: PASS (0 errors, 0 warnings).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add frontend/src/features/github/detail/RepoDeploymentBlock.tsx "frontend/src/app/(admin)/admin/github/[id]/page.tsx"
@@ -238,16 +238,16 @@ git commit -m "feat(github): integrate DeploySetupModal into deployment block an
 
 **Files:** Toàn bộ dự án Backend & Frontend
 
-- [ ] **Step 1: Kiểm tra TypeScript Backend**
+- [x] **Step 1: Kiểm tra TypeScript Backend**
   Run: `npx tsc --noEmit` tại `backend/`.
   Expected: PASS (0 errors).
 
-- [ ] **Step 2: Kiểm tra TypeScript Frontend**
+- [x] **Step 2: Kiểm tra TypeScript Frontend**
   Run: `npx tsc --noEmit` tại `frontend/`.
   Expected: PASS (0 errors).
 
-- [ ] **Step 3: Kiểm tra Linter Frontend**
+- [x] **Step 3: Kiểm tra Linter Frontend**
   Run: `npm run lint` tại `frontend/`.
   Expected: PASS (0 errors, 0 warnings).
 
-- [ ] **Step 4: Commit hoàn tất**
+- [x] **Step 4: Commit hoàn tất**
