@@ -4,7 +4,11 @@
  */
 
 import { api } from '@/lib/api';
-import type { RepoDetailData } from './repo-detail.types';
+import type {
+  RepoDetailData,
+  SetupDeploymentRequest,
+  SetupDeploymentResponse,
+} from './repo-detail.types';
 
 export interface GithubRepoOwner {
   login: string;
@@ -97,5 +101,18 @@ export async function getGithubRepoDetail(
   return await api.get<RepoDetailData>(`/api/v1/github/repos/${id}/overview`, {
     params: refresh ? { refresh: 'true' } : undefined,
   });
+}
+
+/**
+ * Thiết lập triển khai dự án lên Vercel, Render hoặc Cloudflare
+ */
+export async function setupGithubRepoDeployment(
+  repoId: number,
+  payload: SetupDeploymentRequest
+): Promise<SetupDeploymentResponse> {
+  return await api.post<SetupDeploymentResponse>(
+    `/api/v1/github/repos/${repoId}/deployments/setup`,
+    payload
+  );
 }
 

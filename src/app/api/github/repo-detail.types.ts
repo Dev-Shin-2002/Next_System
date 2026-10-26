@@ -189,3 +189,21 @@ export interface RepoDetailData {
   githubDeployments: ListBlock<GithubDeployment>;
   linkedDeployments: ListBlock<LinkedDeployment>;
 }
+
+export interface SetupDeploymentRequest {
+  provider: 'vercel' | 'render' | 'cloudflare';
+  mode: 'launch' | 'api';
+  apiToken?: string;
+  accountId?: string;
+  saveToken?: boolean;
+  createWorkflow?: boolean;
+  projectName?: string;
+}
+
+export interface SetupDeploymentResponse {
+  success: boolean;
+  launchUrl?: string;
+  linkedDeployment?: LinkedDeployment;
+  workflowCreated?: boolean;
+  message?: string;
+}
