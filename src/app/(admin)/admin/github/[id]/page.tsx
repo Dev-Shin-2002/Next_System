@@ -205,9 +205,11 @@ export default function RepoDetailPage() {
 
       {/* 5. Deployments Block */}
       <RepoDeploymentBlock
+        repo={data.repo}
         linkedDeployments={data.linkedDeployments}
         githubDeployments={data.githubDeployments}
         onRetry={() => fetchOverview(true)}
+        onRefresh={() => fetchOverview(true)}
       />
     </div>
   );

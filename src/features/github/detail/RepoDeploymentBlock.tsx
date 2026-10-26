@@ -3,17 +3,21 @@ import Link from 'next/link';
 import { Typography } from '@/components/common/Typography';
 import { Button } from '@/components/common/Button';
 import { IconRegistry } from '@/components/common/IconRegistry';
+import { DeploySetupModal } from './DeploySetupModal';
 import type {
   ListBlock,
   LinkedDeployment,
   GithubDeployment,
+  Repo,
 } from '@/app/api/github/repo-detail.types';
 
 export interface RepoDeploymentBlockProps {
+  repo?: Repo;
   linkedDeployments: ListBlock<LinkedDeployment>;
   githubDeployments: ListBlock<GithubDeployment>;
   onLinkDeployment?: () => void;
   onRetry?: () => void;
+  onRefresh?: () => void;
 }
 
 function timeAgo(isoString: string | null): string {
@@ -37,11 +41,13 @@ function timeAgo(isoString: string | null): string {
 }
 
 export const RepoDeploymentBlock: React.FC<RepoDeploymentBlockProps> = ({
+  repo,
   linkedDeployments,
   githubDeployments,
   onLinkDeployment,
+  onRefresh,
 }) => {
-  const [showNotice, setShowNotice] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const hasGithubDeploys =
     githubDeployments.status === 'ok' && githubDeployments.items.length > 0;
@@ -51,10 +57,8 @@ export const RepoDeploymentBlock: React.FC<RepoDeploymentBlockProps> = ({
   const handleLinkClick = () => {
     if (onLinkDeployment) {
       onLinkDeployment();
-    } else {
-      setShowNotice(true);
-      setTimeout(() => setShowNotice(false), 4000);
     }
+    setIsModalOpen(true);
   };
 
   return (
@@ -82,19 +86,6 @@ export const RepoDeploymentBlock: React.FC<RepoDeploymentBlockProps> = ({
           <span>Liên kết triển khai</span>
         </Button>
       </div>
-
-      {/* Temporary Toast/Notice */}
-      {showNotice && (
-        <div className="px-5 py-2.5 bg-[#0a121d] border-b border-[#52a8ff]/30 text-xs text-[#52a8ff] flex items-center justify-between">
-          <span>Tính năng liên kết Vercel, Render và Cloudflare Pages sẽ ra mắt trong Phase 2!</span>
-          <button
-            onClick={() => setShowNotice(false)}
-            className="text-neutral-400 hover:text-white"
-          >
-            ✕
-          </button>
-        </div>
-      )}
 
       {/* Block Body */}
       <div className="p-4">
@@ -148,11 +139,10 @@ export const RepoDeploymentBlock: React.FC<RepoDeploymentBlockProps> = ({
                   <div className="space-y-1 min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono border ${
-                          isSuccess
-                            ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
-                            : 'bg-neutral-900 text-neutral-400 border-neutral-800'
-                        }`}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono border ${isSuccess
+                          ? 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30'
+                          : 'bg-neutral-900 text-neutral-400 border-neutral-800'
+                          }`}
                       >
                         {state}
                       </span>
@@ -206,6 +196,18 @@ export const RepoDeploymentBlock: React.FC<RepoDeploymentBlockProps> = ({
           </div>
         )}
       </div>
+
+      {/* Deploy Setup Modal */}
+      {repo && (
+        <DeploySetupModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          repo={repo}
+          onSuccess={() => {
+            if (onRefresh) onRefresh();
+          }}
+        />
+      )}
     </div>
   );
 };
