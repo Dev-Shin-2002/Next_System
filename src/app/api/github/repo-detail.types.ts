@@ -164,6 +164,7 @@ export type LinkedDeploymentState =
   | 'ready'
   | 'error'
   | 'canceled'
+  | 'suspended'
   | 'unknown';
 
 export interface LinkedDeployment {
@@ -190,14 +191,38 @@ export interface RepoDetailData {
   linkedDeployments: ListBlock<LinkedDeployment>;
 }
 
+export interface EnvVarConfig {
+  key: string;
+  type: 'sync_prompt' | 'value' | 'generate_value';
+  value?: string;
+}
+
 export interface SetupDeploymentRequest {
   provider: 'vercel' | 'render' | 'cloudflare';
-  mode: 'launch' | 'api';
+  mode?: 'api';
   apiToken?: string;
   accountId?: string;
   saveToken?: boolean;
   createWorkflow?: boolean;
   projectName?: string;
+  buildCommand?: string;
+  startCommand?: string;
+
+  // Render specific
+  region?: string;
+  branch?: string;
+  autoDeploy?: boolean;
+
+  // Vercel specific
+  framework?: string;
+  rootDirectory?: string;
+  outputDirectory?: string;
+  installCommand?: string;
+
+  // Cloudflare specific
+  outputDir?: string;
+
+  envVars?: EnvVarConfig[];
 }
 
 export interface SetupDeploymentResponse {
@@ -207,3 +232,35 @@ export interface SetupDeploymentResponse {
   workflowCreated?: boolean;
   message?: string;
 }
+
+export interface RepoEnvExampleResponse {
+  foundFile: string | null;
+  keys: string[];
+}
+
+export interface DeployHistoryItem {
+  id: string;
+  status: string;
+  commitSha?: string | null;
+  commitMessage?: string | null;
+  createdAt: string;
+  finishedAt?: string | null;
+  trigger?: string | null;
+}
+
+export interface DeploymentLogEntry {
+  timestamp: string;
+  message: string;
+  level?: 'info' | 'warn' | 'error';
+}
+
+export interface DeploymentLogsResponse {
+  provider: 'vercel' | 'render' | 'cloudflare';
+  projectName: string;
+  status: string;
+  url: string | null;
+  dashboardUrl: string | null;
+  deploys: DeployHistoryItem[];
+  logs: DeploymentLogEntry[];
+}
+

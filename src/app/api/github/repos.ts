@@ -8,6 +8,8 @@ import type {
   RepoDetailData,
   SetupDeploymentRequest,
   SetupDeploymentResponse,
+  RepoEnvExampleResponse,
+  LinkedDeploymentState,
 } from './repo-detail.types';
 
 export interface GithubRepoOwner {
@@ -115,4 +117,79 @@ export async function setupGithubRepoDeployment(
     payload
   );
 }
+
+/**
+ * Quét các biến môi trường từ file mẫu (.env.example, .env.sample, ...) trên GitHub repository
+ */
+export async function scanGithubRepoEnvExample(
+  repoId: number
+): Promise<RepoEnvExampleResponse> {
+  return await api.get<RepoEnvExampleResponse>(
+    `/api/v1/github/repos/${repoId}/env-example`
+  );
+}
+
+/**
+ * Xóa liên kết triển khai dự án khỏi repository
+ */
+export async function deleteGithubDeploymentLink(
+  _repoId: number,
+  linkId: string
+): Promise<{ success: boolean; message: string }> {
+  return await api.delete<{ success: boolean; message: string }>(
+    `/api/v1/deployments/links/${linkId}`
+  );
+}
+
+/**
+ * Tạm ngưng hoặc kích hoạt lại liên kết triển khai dự án
+ */
+export async function toggleGithubDeploymentSuspend(
+  _repoId: number,
+  linkId: string,
+  action?: 'suspend' | 'resume'
+): Promise<{ success: boolean; state: LinkedDeploymentState; message: string }> {
+  return await api.post<{ success: boolean; state: LinkedDeploymentState; message: string }>(
+    `/api/v1/deployments/links/${linkId}/toggle-suspend`,
+    { action }
+  );
+}
+
+/**
+ * Lấy tiến trình triển khai và logs thời gian thực từ Provider
+ */
+export async function fetchGithubDeploymentLogs(
+  repoId: number,
+  linkId: string
+): Promise<import('./repo-detail.types').DeploymentLogsResponse> {
+  return await api.get<import('./repo-detail.types').DeploymentLogsResponse>(
+    `/api/v1/github/repos/${repoId}/deployments/links/${linkId}/logs`
+  );
+}
+
+/**
+ * Kích hoạt triển khai commit mới nhất trực tiếp qua Cloud Provider
+ */
+export async function triggerGithubDeploymentDeploy(
+  repoId: number,
+  linkId: string
+): Promise<{ success: boolean; message: string; deployId?: string }> {
+  return await api.post<{ success: boolean; message: string; deployId?: string }>(
+    `/api/v1/github/repos/${repoId}/deployments/links/${linkId}/deploy`
+  );
+}
+
+/**
+ * Khởi động lại (Restart Service) container/web service qua Cloud Provider
+ */
+export async function restartGithubDeploymentService(
+  repoId: number,
+  linkId: string
+): Promise<{ success: boolean; message: string }> {
+  return await api.post<{ success: boolean; message: string }>(
+    `/api/v1/github/repos/${repoId}/deployments/links/${linkId}/restart`
+  );
+}
+
+
 

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { Typography } from '@/components/common/Typography';
 import { IconRegistry } from '@/components/common/IconRegistry';
 import type { GithubRateLimit } from '@/app/api/github/repos';
+import { UpdateGithubTokenModal } from './UpdateGithubTokenModal';
 
 export interface GithubHeaderProps {
   isCached: boolean;
@@ -19,6 +20,7 @@ export const GithubHeader: React.FC<GithubHeaderProps> = ({
   isRefreshing,
   onRefresh,
 }) => {
+  const [isTokenModalOpen, setIsTokenModalOpen] = useState(false);
   return (
     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 pb-4 border-b border-[var(--border)]">
       <div>
@@ -61,6 +63,16 @@ export const GithubHeader: React.FC<GithubHeaderProps> = ({
         <Button
           variant="secondary"
           size="sm"
+          onClick={() => setIsTokenModalOpen(true)}
+          leftIcon={<IconRegistry name="key" size={14} />}
+          title="Cập nhật Personal Access Token (PAT) có quyền workflow và repo"
+        >
+          Cập nhật Token
+        </Button>
+
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={onRefresh}
           disabled={isLoading || isRefreshing}
           isLoading={isRefreshing}
@@ -86,6 +98,12 @@ export const GithubHeader: React.FC<GithubHeaderProps> = ({
           {isRefreshing ? 'Đang đồng bộ...' : 'Làm mới (Force Refresh)'}
         </Button>
       </div>
+
+      <UpdateGithubTokenModal
+        isOpen={isTokenModalOpen}
+        onClose={() => setIsTokenModalOpen(false)}
+        onSuccess={onRefresh}
+      />
     </div>
   );
 };

@@ -182,7 +182,12 @@ async function request<T>(
   }
 
   const headers = new Headers(customConfig.headers || {});
-  if (!headers.has('Content-Type') && !(customConfig.body instanceof FormData)) {
+  if (
+    !headers.has('Content-Type') &&
+    customConfig.body !== undefined &&
+    customConfig.body !== null &&
+    !(customConfig.body instanceof FormData)
+  ) {
     headers.set('Content-Type', 'application/json');
   }
 
